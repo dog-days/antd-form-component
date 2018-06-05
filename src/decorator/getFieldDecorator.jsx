@@ -23,6 +23,9 @@ export default function(name, options) {
         formItemProps: PropTypes.object,
       };
       componentDidMount() {
+        if (options.initialValue) {
+          this.validateField(name, options.initialValue, options.rules);
+        }
         if (!FormItemComponent.props.noFormItem) {
           that.fieldsValidate[name] = () => {
             const { value } = this.state;
@@ -62,6 +65,7 @@ export default function(name, options) {
             this.setState({
               value,
               errors: undefined,
+              canBeRendered: true,
             });
             that.trigger('form-values', {
               name,
@@ -75,6 +79,7 @@ export default function(name, options) {
             this.setState({
               value,
               errors,
+              canBeRendered: true,
             });
             that.trigger('form-values', {
               name,
@@ -140,7 +145,13 @@ export default function(name, options) {
           otherItemProps.children
         );
       }
+      deleteUnuseProps(otherItemProps) {
+        delete otherItemProps.onlyLetter;
+      }
       render() {
+        if (!this.state.canBeRendered) {
+          return false;
+        }
         const help = this.getErrorMessage();
         const validateStatus = this.getValidateStatus();
         const context = this.context;
@@ -150,6 +161,7 @@ export default function(name, options) {
           noFormItem,
           ...otherItemProps
         } = FormItemComponent.props;
+        this.deleteUnuseProps(otherItemProps);
         if (otherItemProps.type !== 'file') {
           //input type=file是不受控表单
           otherItemProps.value = this.state.value;

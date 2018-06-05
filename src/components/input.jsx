@@ -45,7 +45,11 @@ export default class Input extends React.Component {
     return getFieldDecorator(name, {
       initialValue: value,
       rules: [
-        ...this.getDefaultRules(this.locale, other.label ? other.label : name),
+        ...this.getDefaultRules(
+          'input',
+          this.locale,
+          other.label ? other.label : name
+        ),
         ...specialRules,
         ...rules,
       ],
