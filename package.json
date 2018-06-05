@@ -1,7 +1,7 @@
 {
   "version": "0.0.1",
   "dependencies": {
-    "async-validate": "^1.0.1",
+    "async-validator": "^1.8.2",
     "classnames": "^2.2.5",
     "lodash": "^4.17.10",
     "prop-types": "^15.6.1",
