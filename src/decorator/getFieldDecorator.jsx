@@ -14,7 +14,11 @@ export default function(name, options) {
     //当FormItemComponent.props.noFormItem为true时，不渲染antd的Form.Item
     //也不进行合法校验
     class FormItem extends React.Component {
-      state = { value: options.initialValue };
+      state = {
+        value: options.initialValue,
+        //有初始值则需要验证是否合法才给渲染，否则不用。
+        canBeRendered: options.initialValue ? false : true,
+      };
       static contextTypes = {
         size: PropTypes.string,
         hasFeedback: PropTypes.bool,
@@ -60,7 +64,7 @@ export default function(name, options) {
         });
       }
       validateField(name, value, rules) {
-        return validateField(name, value, rules).then(
+        return validateField(name, value, rules)(
           () => {
             this.setState({
               value,
@@ -147,6 +151,8 @@ export default function(name, options) {
       }
       deleteUnuseProps(otherItemProps) {
         delete otherItemProps.onlyLetter;
+        delete otherItemProps.min;
+        delete otherItemProps.max;
       }
       render() {
         if (!this.state.canBeRendered) {

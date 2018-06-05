@@ -7,7 +7,10 @@ import AInput from 'antd/lib/input';
 import defaultRulesDecorator from '../decorator/defaultRules';
 import validateDecorator from '../decorator/validate';
 import commonContextDecorator from '../decorator/commonContext';
+import pureRenderWithLodashDecorator from '../decorator/pureRenderWithLodash';
 
+//防止被重复渲染
+@pureRenderWithLodashDecorator
 //验证name等值是否定义
 @validateDecorator
 //默认的一些rules，如required

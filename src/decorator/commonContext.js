@@ -7,18 +7,16 @@ export default function(component) {
     form: PropTypes.object,
     locale: PropTypes.object,
   };
-  component.prototype = Object.create(component.prototype, {
-    locale: {
-      get: function() {
-        if (!this._tempLocale) {
-          //context.locale是getter
-          this._tempLocale = {
-            ...this.context.locale,
-            ...this.props.locale,
-          };
-        }
-        return this._tempLocale;
-      },
+  Object.defineProperty(component.prototype, 'locale', {
+    get: function() {
+      if (!this._tempLocale) {
+        //context.locale是getter
+        this._tempLocale = {
+          ...this.context.locale,
+          ...this.props.locale,
+        };
+      }
+      return this._tempLocale;
     },
   });
   return component;
