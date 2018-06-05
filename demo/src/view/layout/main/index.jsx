@@ -2,8 +2,10 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classnames from 'classnames';
 
+import 'antd/dist/antd.css';
 import 'src/style/css/bootstrap.css';
 import 'src/style/css/layout-main.less';
+import 'antd-form-component/assets/css/style.less';
 
 class MainLayout extends React.Component {
   renderItem(title, viewId) {
