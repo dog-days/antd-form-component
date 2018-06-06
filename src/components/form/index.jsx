@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import isFunction from 'lodash/isFunction';
 import AForm from 'antd/lib/form';
 //内部依赖包
-import event from '../utils/event';
-import getFieldDecorator from '../decorator/getFieldDecorator';
-import defaultLoacale from '../locale-provider/zh_CN';
+import event from '../../utils/event';
+import getFieldDecorator from '../../decorator/getFieldDecorator';
+import defaultLoacale from '../../locale-provider/zh_CN';
 
 class Form extends React.Component {
   static create() {

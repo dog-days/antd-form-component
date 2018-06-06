@@ -43,8 +43,6 @@ class IndexView extends React.Component {
             }}
             hasFeedback
             size="default"
-            labelCol={{ span: 2 }}
-            wrapperCol={{ span: 22 }}
           >
             {true && <button>提交</button>}
             <Input
@@ -57,6 +55,12 @@ class IndexView extends React.Component {
             <Input label="test2" name="test2" required type="email" />
             <Input label="file" name="test222" required type="file" />
             <Input label="test3" name="test3" required type="url" />
+            <Input.TextArea
+              autosize
+              label="textarea"
+              name="textarea"
+              required
+            />
             {data.map((v, k) => {
               return (
                 <Input

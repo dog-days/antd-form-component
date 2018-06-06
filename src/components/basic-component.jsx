@@ -1,8 +1,5 @@
 //外部依赖包
 import React from 'react';
-// import PropTypes from 'prop-types';
-import AInput from 'antd/lib/input';
-// import PropTypes from 'prop-types';
 
 import defaultRulesDecorator from '../decorator/defaultRules';
 import validateDecorator from '../decorator/validate';
@@ -18,30 +15,16 @@ import pureRenderWithLodashDecorator from '../decorator/pureRenderWithLodash';
 //公共的context
 @commonContextDecorator
 export default class Input extends React.Component {
-  getSepcialRuleByType(type) {
-    const rules = [];
-    const locale = this.locale;
-    switch (type) {
-      case 'email':
-        rules.push({
-          type: 'email',
-          message: locale.afcInput.emailFormat,
-        });
-        break;
-      case 'url':
-        rules.push({
-          type: 'url',
-          message: locale.afcInput.urlFormat,
-        });
-        break;
-      default:
-    }
-    return rules;
+  //定义当前需要用到的antd表单组件
+  currentAntdComponent = <span />;
+  //设置特殊的async-validator rules
+  getSepcialRuleByType() {
+    return [];
   }
   render() {
     if (!this.context.form) {
       //如果没有使用Form.create()
-      return <AInput {...this.props} />;
+      return <this.currentAntdComponent {...this.props} />;
     }
     const { getFieldDecorator } = this.context.form;
     let { name, value, rules = [], ...other } = this.props;
@@ -60,6 +43,6 @@ export default class Input extends React.Component {
         ...specialRules,
         ...rules,
       ],
-    })(<AInput {...other} />);
+    })(<this.currentAntdComponent {...other} />);
   }
 }
