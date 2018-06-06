@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'antd';
+import isNumber from 'lodash/isNumber';
 
 import { validateField } from '../utils/util';
 
 export default function(name, options) {
   //转换成字符串
-  if (options.initialValue) {
+  if (isNumber(options.initialValue)) {
     options.initialValue += '';
   }
   const that = this;
@@ -101,7 +102,14 @@ export default function(name, options) {
       }
       onChange = e => {
         const { onChange } = this.props;
-        let value = e.target ? e.target.value : e;
+        let value;
+        if (!e) {
+          value = undefined;
+        } else if (e.target) {
+          value = e.target.value;
+        } else {
+          value = e;
+        }
         if (FormItemComponent.props.type === 'file') {
           //特殊处理type=file的情况
           value = e.target.files[0];

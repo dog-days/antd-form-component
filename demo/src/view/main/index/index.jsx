@@ -1,6 +1,7 @@
 import React from 'react';
+import moment from 'moment';
 import { LocaleProvider } from 'antd';
-import { Form, Input, Select } from 'antd-form-component';
+import { Form, Input, Select, TimePicker } from 'antd-form-component';
 
 const Option = Select.Option;
 const OptGroup = Select.OptGroup;
@@ -103,6 +104,11 @@ class IndexView extends React.Component {
               <Option value="lucy">Lucy</Option>
               <Option value="Yiminghe">yiminghe</Option>
             </Select>
+            <TimePicker
+              label="timepicker"
+              name="time-picker"
+              value={moment('00:00:00', 'HH:mm:ss')}
+            />
             {data.map((v, k) => {
               return (
                 <Input

@@ -42,19 +42,24 @@
   "name": "antd-form",
   "scripts": {
     "build-css": "lessc ./src/assets/css/style.less ./src/assets/css/style.css",
-    "build": "npm run build-dll hide-message && react-boilerplate-app-scripts build",
+    "build-demo":
+      "npm run build-dll hide-message && react-boilerplate-app-scripts build",
     "build-dll": "react-boilerplate-app-scripts build-dll",
     "cover": "react-boilerplate-app-scripts cover",
     "serve-build": "react-boilerplate-app-scripts serve-build",
-    "start": "npm run build-dll hide-message && react-boilerplate-app-scripts start",
+    "start":
+      "npm run build-dll hide-message && react-boilerplate-app-scripts start",
     "use": "react-boilerplate-app-scripts use",
-    "build-publish": "npm run test && npm run build-css && npm run transform && npm publish",
+    "build-publish":
+      "npm run test && npm run build-css && npm run transform && npm publish",
     "prettier": "prettier --write './**/*(*.js|*.jsx|*.less|*.css)'",
-    "transform": "npm run transform-es && npm run transform-default && cp -R ./src/assets ./libs && cp -R ./src/assets ./es",
+    "transform":
+      "npm run transform-es && npm run transform-default && cp -R ./src/assets ./libs && cp -R ./src/assets ./es",
     "transform-es": "cross-env BABEL_ENV=es babel ./src -d es",
     "transform-es-watch": "cross-env BABEL_ENV=es babel ./src -d es -w",
     "transform-default": "cross-env BABEL_ENV=production babel ./src -d libs",
-    "transform-default-watch": "cross-env BABEL_ENV=default babel ./src -d libs -w"
+    "transform-default-watch":
+      "cross-env BABEL_ENV=default babel ./src -d libs -w"
   },
   "husky": {
     "hooks": {
@@ -63,13 +68,8 @@
     }
   },
   "lint-staged": {
-    "*.js|*.jsx": [
-      "eslint"
-    ],
-    "*.js|*.jsx|*.less|*.css": [
-      "prettier --write",
-      "git add"
-    ]
+    "*.js|*.jsx": ["eslint"],
+    "*.js|*.jsx|*.less|*.css": ["prettier --write", "git add"]
   },
   "react-boilerplate-app-scripts": {
     "basename": "demo/antd-form-component",
@@ -87,15 +87,10 @@
       ],
       "stage-0"
     ],
-    "plugins": [
-      "transform-decorators-legacy",
-      "transform-runtime"
-    ],
+    "plugins": ["transform-decorators-legacy", "transform-runtime"],
     "env": {
       "development": {
-        "plugins": [
-          "react-hot-loader/babel"
-        ]
+        "plugins": ["react-hot-loader/babel"]
       }
     }
   },
