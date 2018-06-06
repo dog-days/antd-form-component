@@ -64,37 +64,40 @@ export default function(name, options) {
         });
       }
       validateField(name, value, rules) {
-        return validateField(name, value, rules)(
-          () => {
-            this.setState({
-              value,
-              errors: undefined,
-              canBeRendered: true,
-            });
-            that.trigger('form-values', {
-              name,
-              fieldValue: value,
-            });
-            that.trigger('form-errors', {
-              name,
-            });
-          },
-          errors => {
-            this.setState({
-              value,
-              errors,
-              canBeRendered: true,
-            });
-            that.trigger('form-values', {
-              name,
-            });
-            that.trigger('form-errors', {
-              name,
-              fieldError: errors,
-            });
-            return errors;
-          }
-        );
+        return new Promise(resolve => {
+          validateField(name, value, rules)(
+            () => {
+              this.setState({
+                value,
+                errors: undefined,
+                canBeRendered: true,
+              });
+              that.trigger('form-values', {
+                name,
+                fieldValue: value,
+              });
+              that.trigger('form-errors', {
+                name,
+              });
+              resolve();
+            },
+            errors => {
+              this.setState({
+                value,
+                errors,
+                canBeRendered: true,
+              });
+              that.trigger('form-values', {
+                name,
+              });
+              that.trigger('form-errors', {
+                name,
+                fieldError: errors,
+              });
+              resolve(errors);
+            }
+          );
+        });
       }
       onChange = e => {
         const { onChange } = this.props;
@@ -172,7 +175,7 @@ export default function(name, options) {
           //input type=file是不受控表单
           otherItemProps.value = this.state.value;
         }
-        if (noFormItem) {
+        if (noFormItem || otherItemProps.type === 'hidden') {
           return this.renderItem(otherItemProps);
         } else {
           return (

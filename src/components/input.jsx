@@ -39,6 +39,10 @@ export default class Input extends React.Component {
     return rules;
   }
   render() {
+    if (!this.context.form) {
+      //如果没有使用Form.create()
+      return <AInput {...this.props} />;
+    }
     const { getFieldDecorator } = this.context.form;
     let { name, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);

@@ -139,7 +139,8 @@ class Form extends React.Component {
       fieldsValidate = {};
       fieldsValue = {};
       fieldsError = {};
-      componentDidMount() {
+      //v17.0版本后会移除componentWillMount
+      componentWillMount() {
         this.on('form-values', ({ name, fieldValue }) => {
           if (fieldValue) {
             this.fieldsValue[name] = fieldValue;
@@ -154,6 +155,10 @@ class Form extends React.Component {
             delete this.fieldsError[name];
           }
         });
+      }
+      //兼容后续新版本componentWillMount
+      UNSAFE_componentWillMount() {
+        this.componentWillMount();
       }
       componentWillUnmount() {
         this.off();
