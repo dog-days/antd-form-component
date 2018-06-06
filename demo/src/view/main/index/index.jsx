@@ -1,7 +1,15 @@
 import React from 'react';
 import moment from 'moment';
 import { LocaleProvider } from 'antd';
-import { Form, Input, Select, TimePicker } from 'antd-form-component';
+import zhCN from 'antd/lib/locale-provider/zh_CN';
+import {
+  Form,
+  Input,
+  Select,
+  TimePicker,
+  DatePicker,
+  Checkbox,
+} from 'antd-form-component';
 
 const Option = Select.Option;
 const OptGroup = Select.OptGroup;
@@ -22,9 +30,12 @@ class IndexView extends React.Component {
   render() {
     console.debug('index页面');
     const { form } = this.props;
+    const dateFormat = 'YYYY/MM/DD';
+    const monthFormat = 'YYYY/MM';
 
     return (
-      <LocaleProvider>
+      //antd默认的多语言是英文，设置为中文如下
+      <LocaleProvider locale={zhCN}>
         <div>
           {true && (
             <button
@@ -105,9 +116,53 @@ class IndexView extends React.Component {
               <Option value="Yiminghe">yiminghe</Option>
             </Select>
             <TimePicker
-              label="timepicker"
-              name="time-picker"
+              label="TimePicker"
+              name="timepicker"
               value={moment('00:00:00', 'HH:mm:ss')}
+              required
+            />
+            <DatePicker
+              label="DatePicker"
+              name="datepicker"
+              value={moment('2015/01/01', dateFormat)}
+              format={dateFormat}
+              required
+            />
+            <DatePicker.MonthPicker
+              label="MonthPicker"
+              name="monthpicker"
+              value={moment('2015/01', monthFormat)}
+              format={monthFormat}
+              required
+            />
+            <DatePicker.RangePicker
+              label="RangePicker"
+              name="rangepicker"
+              format={dateFormat}
+              value={[
+                moment('2015/01/01', dateFormat),
+                moment('2015/02/01', dateFormat),
+              ]}
+              required
+            />
+            <DatePicker.WeekPicker
+              label="WeekPicker"
+              name="weekpicker"
+              required
+            />
+            <Checkbox label="Checkbox" name="checkbox" required>
+              Checkbox
+            </Checkbox>
+            <Checkbox.Group
+              label="CheckboxGroup"
+              name="checkboxgroup"
+              options={[
+                { label: 'Apple', value: 'Apple' },
+                { label: 'Pear', value: 'Pear' },
+                { label: 'Orange', value: 'Orange' },
+              ]}
+              value={['Pear']}
+              required
             />
             {data.map((v, k) => {
               return (

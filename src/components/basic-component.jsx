@@ -32,6 +32,10 @@ export default class Input extends React.Component {
     if (other.type === 'email' || other.type === 'url') {
       delete other.type;
     }
+    if (!other.type && this.componentType) {
+      //处理checkbox等
+      other.type = this.componentType;
+    }
     return getFieldDecorator(name, {
       initialValue: value,
       rules: [

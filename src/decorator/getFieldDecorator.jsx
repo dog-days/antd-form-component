@@ -114,6 +114,10 @@ export default function(name, options) {
           //特殊处理type=file的情况
           value = e.target.files[0];
         }
+        if (FormItemComponent.props.type === 'checkbox') {
+          //特殊处理type=file的情况
+          value = e.target.checked;
+        }
         onChange && onChange(e);
         if (!FormItemComponent.props.noFormItem) {
           this.validateField(name, value, options.rules);
@@ -183,12 +187,20 @@ export default function(name, options) {
           //input type=file是不受控表单
           otherItemProps.value = this.state.value;
         }
+        let hasFeedback = context.hasFeedback;
+        if (
+          otherItemProps.type === 'checkbox' ||
+          otherItemProps.type === 'checkbox-group'
+        ) {
+          //checkbox不需要feedback提示，影响布局美观
+          hasFeedback = false;
+        }
         if (noFormItem || otherItemProps.type === 'hidden') {
           return this.renderItem(otherItemProps);
         } else {
           return (
             <Form.Item
-              hasFeedback={context.hasFeedback}
+              hasFeedback={hasFeedback}
               wrapperCol={context.wrapperCol}
               labelCol={context.labelCol}
               {...context.formItemProps}
