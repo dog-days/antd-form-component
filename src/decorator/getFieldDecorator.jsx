@@ -116,7 +116,11 @@ export default function(name, options) {
         }
         if (FormItemComponent.props.type === 'checkbox') {
           //特殊处理type=file的情况
-          value = e.target.checked;
+          if (e.target.checked) {
+            value = e.target.checked;
+          } else {
+            value = '';
+          }
         }
         onChange && onChange(e);
         if (!FormItemComponent.props.noFormItem) {
