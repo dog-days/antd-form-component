@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Form } from 'antd';
-import isNumber from 'lodash/isNumber';
 
 import { validateField } from '../utils/util';
 
 export default function(name, options) {
-  //转换成字符串
-  if (isNumber(options.initialValue)) {
-    options.initialValue += '';
-  }
   const that = this;
   return FormItemComponent => {
     //当FormItemComponent.props.noFormItem为true时，不渲染antd的Form.Item
@@ -193,6 +188,7 @@ export default function(name, options) {
         }
         let hasFeedback = context.hasFeedback;
         if (
+          otherItemProps.type === 'radio-group' ||
           otherItemProps.type === 'checkbox' ||
           otherItemProps.type === 'checkbox-group'
         ) {

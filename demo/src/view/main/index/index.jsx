@@ -9,6 +9,7 @@ import {
   TimePicker,
   DatePicker,
   Checkbox,
+  Radio,
 } from 'antd-form-component';
 
 const Option = Select.Option;
@@ -150,9 +151,6 @@ class IndexView extends React.Component {
               name="weekpicker"
               required
             />
-            <Checkbox label="Checkbox" name="checkbox" required>
-              Checkbox
-            </Checkbox>
             <Checkbox.Group
               label="CheckboxGroup"
               name="checkboxgroup"
@@ -164,6 +162,12 @@ class IndexView extends React.Component {
               value={['Pear']}
               required
             />
+            <Radio.Group label="RadioGroup" name="radiogroup" value={1}>
+              <Radio value={1}>A</Radio>
+              <Radio value={2}>B</Radio>
+              <Radio value={3}>C</Radio>
+              <Radio value={4}>D</Radio>
+            </Radio.Group>
             {data.map((v, k) => {
               return (
                 <Input
