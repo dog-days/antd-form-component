@@ -1,3 +1,4 @@
 import Form from './components/form';
 import Input from './components/input';
-export { Form, Input };
+import Select from './components/select';
+export { Form, Input, Select };

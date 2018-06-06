@@ -1,6 +1,9 @@
 import React from 'react';
 import { LocaleProvider } from 'antd';
-import { Form, Input } from 'antd-form-component';
+import { Form, Input, Select } from 'antd-form-component';
+
+const Option = Select.Option;
+const OptGroup = Select.OptGroup;
 
 const data = [];
 for (let i = 0; i < 1; i++) {
@@ -56,6 +59,50 @@ class IndexView extends React.Component {
             <Input label="网址" name="url" required type="url" />
             <Input label="上传" name="file" required type="file" />
             <Input.TextArea autosize label="描述" name="textarea" required />
+            <Select
+              //selet设置props.mode后回车都会触发提交表单，这个是antd默认行为
+              label="单选Select"
+              name="single-select"
+              required
+            >
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
+            <Select
+              mode="multiple"
+              label="多选Select"
+              name="multiple-select"
+              required
+            >
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
+            <Select mode="tags" label="标签Select" name="tags-select" required>
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
+            <Select label="分组Select" name="group-select" required>
+              <OptGroup label="Manager">
+                <Option value="jack">Jack</Option>
+                <Option value="lucy">Lucy</Option>
+              </OptGroup>
+              <OptGroup label="Engineer">
+                <Option value="Yiminghe">yiminghe</Option>
+              </OptGroup>
+            </Select>
+            <Select
+              mode="combobox"
+              label="combobox Select"
+              name="combobox-select"
+              required
+            >
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
             {data.map((v, k) => {
               return (
                 <Input

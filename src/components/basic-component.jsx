@@ -27,7 +27,7 @@ export default class Input extends React.Component {
       return <this.currentAntdComponent {...this.props} />;
     }
     const { getFieldDecorator } = this.context.form;
-    let { name, value, rules = [], ...other } = this.props;
+    let { children, name, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);
     if (other.type === 'email' || other.type === 'url') {
       delete other.type;
@@ -43,6 +43,10 @@ export default class Input extends React.Component {
         ...specialRules,
         ...rules,
       ],
-    })(<this.currentAntdComponent {...other} />);
+    })(
+      <this.currentAntdComponent {...other}>
+        {children}
+      </this.currentAntdComponent>
+    );
   }
 }
