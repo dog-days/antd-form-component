@@ -10,6 +10,7 @@ import {
   DatePicker,
   Checkbox,
   Radio,
+  Cascader,
 } from 'antd-form-component';
 
 const Option = Select.Option;
@@ -27,6 +28,42 @@ class IndexView extends React.Component {
       email: 'email@qq.com',
       url: 'http://www.localhost.com',
     });
+  }
+  getCascaderOptions() {
+    return [
+      {
+        value: 'zhejiang',
+        label: 'Zhejiang',
+        children: [
+          {
+            value: 'hangzhou',
+            label: 'Hangzhou',
+            children: [
+              {
+                value: 'xihu',
+                label: 'West Lake',
+              },
+            ],
+          },
+        ],
+      },
+      {
+        value: 'jiangsu',
+        label: 'Jiangsu',
+        children: [
+          {
+            value: 'nanjing',
+            label: 'Nanjing',
+            children: [
+              {
+                value: 'zhonghuamen',
+                label: 'Zhong Hua Men',
+              },
+            ],
+          },
+        ],
+      },
+    ];
   }
   render() {
     console.debug('index页面');
@@ -168,6 +205,12 @@ class IndexView extends React.Component {
               <Radio value={3}>C</Radio>
               <Radio value={4}>D</Radio>
             </Radio.Group>
+            <Cascader
+              name="cascader"
+              label="Cascader"
+              required
+              options={this.getCascaderOptions()}
+            />
             {data.map((v, k) => {
               return (
                 <Input
