@@ -6,5 +6,6 @@ import ATimePicker from 'antd/lib/time-picker';
 import BasicComponent from '../basic-component';
 
 export default class TimePicker extends BasicComponent {
+  componentType = 'time-picker';
   currentAntdComponent = ATimePicker;
 }

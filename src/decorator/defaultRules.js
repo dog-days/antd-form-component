@@ -62,7 +62,7 @@ function getDefaultRules(componentType, locale, label) {
       message: sprintf(locale.afcCommon.isRequired, label),
     });
   }
-  if (componentType === 'input') {
+  if (componentType === 'text') {
     if (onlyLetter) {
       defaultRules.push({
         validator(rule, value, callback) {

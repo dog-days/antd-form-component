@@ -5,4 +5,14 @@ import TimePicker from './components/time-picker';
 import DatePicker from './components/date-picker';
 import Checkbox from './components/checkbox';
 import Radio from './components/radio';
-export { Form, Input, Select, TimePicker, DatePicker, Checkbox, Radio };
+import Cascader from './components/cascader';
+export {
+  Form,
+  Input,
+  Select,
+  TimePicker,
+  DatePicker,
+  Checkbox,
+  Radio,
+  Cascader,
+};

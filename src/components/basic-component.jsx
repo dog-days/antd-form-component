@@ -15,6 +15,8 @@ import pureRenderWithLodashDecorator from '../decorator/pureRenderWithLodash';
 //公共的context
 @commonContextDecorator
 export default class Input extends React.Component {
+  //定义组件类型
+  componentType = 'text';
   //定义当前需要用到的antd表单组件
   currentAntdComponent = <span />;
   //设置特殊的async-validator rules
@@ -30,7 +32,7 @@ export default class Input extends React.Component {
     let { children, name, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);
     if (other.type === 'email' || other.type === 'url') {
-      delete other.type;
+      other.type = 'text';
     }
     if (!other.type && this.componentType) {
       //处理checkbox等
@@ -40,7 +42,7 @@ export default class Input extends React.Component {
       initialValue: value,
       rules: [
         ...this.getDefaultRules(
-          'input',
+          other.type,
           this.locale,
           other.label ? other.label : name
         ),

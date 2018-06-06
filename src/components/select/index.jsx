@@ -6,6 +6,7 @@ import ASelect from 'antd/lib/select';
 import BasicComponent from '../basic-component';
 
 export default class Select extends BasicComponent {
+  componentType = 'select';
   currentAntdComponent = ASelect;
 }
 Select.Option = ASelect.Option;
