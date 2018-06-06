@@ -11,8 +11,8 @@ class IndexView extends React.Component {
   componentDidMount() {
     const { form } = this.props;
     form.setFieldsValue({
-      test2: 'email@qq.com',
-      test3: 'http://www.localhost.com',
+      email: 'email@qq.com',
+      url: 'http://www.localhost.com',
     });
   }
   render() {
@@ -46,21 +46,16 @@ class IndexView extends React.Component {
           >
             {true && <button>提交</button>}
             <Input
-              name="test"
-              value={222}
+              name="text"
+              value="葛新安"
               required
               placeholder="test"
               label="姓名"
             />
-            <Input label="test2" name="test2" required type="email" />
-            <Input label="file" name="test222" required type="file" />
-            <Input label="test3" name="test3" required type="url" />
-            <Input.TextArea
-              autosize
-              label="textarea"
-              name="textarea"
-              required
-            />
+            <Input label="邮箱" name="email" required type="email" />
+            <Input label="网址" name="url" required type="url" />
+            <Input label="上传" name="file" required type="file" />
+            <Input.TextArea autosize label="描述" name="textarea" required />
             {data.map((v, k) => {
               return (
                 <Input
