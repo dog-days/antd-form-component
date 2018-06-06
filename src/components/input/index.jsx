@@ -29,6 +29,10 @@ export default class Input extends BasicComponent {
     return rules;
   }
 }
-Input.TextArea = class Input extends BasicComponent {
+Input.TextArea = class InputTextArea extends BasicComponent {
   currentAntdComponent = AInput.TextArea;
 };
+Input.Search = class InputSearch extends BasicComponent {
+  currentAntdComponent = AInput.Search;
+};
+Input.Group = AInput.Group;
