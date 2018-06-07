@@ -13,4 +13,9 @@ export default {
     emailFormat: '电子邮件格式不正确',
     urlFormat: 'url格式不正确',
   },
+  afcPassword: {
+    checkLabel: '确认密码',
+    checkErrorMsg: '您两次输入的密码不一致',
+    formatErrorMsg: '密码必须是字母和数字结合',
+  },
 };

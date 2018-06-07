@@ -5,19 +5,8 @@ export default function(component) {
   component.contextTypes = {
     ...component.contextTypes,
     form: PropTypes.object,
+    FormItem: PropTypes.func,
     locale: PropTypes.object,
   };
-  Object.defineProperty(component.prototype, 'locale', {
-    get: function() {
-      if (!this._tempLocale) {
-        //context.locale是getter
-        this._tempLocale = {
-          ...this.context.locale,
-          ...this.props.locale,
-        };
-      }
-      return this._tempLocale;
-    },
-  });
   return component;
 }

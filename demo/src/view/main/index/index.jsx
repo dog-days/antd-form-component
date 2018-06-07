@@ -5,23 +5,22 @@ import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {
   Form,
   Input,
+  InputNumber,
   Select,
   TimePicker,
   DatePicker,
   Checkbox,
   Radio,
   Cascader,
+  Password,
 } from 'antd-form-component';
 
 const Option = Select.Option;
 const OptGroup = Select.OptGroup;
 
-const data = [];
-for (let i = 0; i < 1; i++) {
-  data.push(i);
-}
 @Form.create()
 class IndexView extends React.Component {
+  state = {};
   componentDidMount() {
     const { form } = this.props;
     form.setFieldsValue({
@@ -82,6 +81,7 @@ class IndexView extends React.Component {
                 const errors = form.getFieldsError();
                 console.log(values, errors);
                 // form.resetFields(['test2']);
+                this.setState({ value: Math.random() });
               }}
             >
               test
@@ -99,19 +99,39 @@ class IndexView extends React.Component {
           >
             {true && <button>提交</button>}
             <Input
-              name="text"
-              value="葛新安"
+              name="Text"
               required
               placeholder="test"
-              label="姓名"
+              label="text"
+              // value={this.state.value}
+              value="text"
             />
-            <Input label="邮箱" name="email" required type="email" />
-            <Input label="网址" name="url" required type="url" />
-            <Input label="上传" name="file" required type="file" />
+            <InputNumber label="InputNumber" name="input-number" required />
+            <Input label="Email" name="email" required type="email" />
+            <Input label="Url" name="url" required type="url" />
+            <Input label="File" name="file" required type="file" />
             <Input.TextArea autosize label="描述" name="textarea" required />
+            <Password name="parssword" label="密码" required checkPassword />
+            <Checkbox.Group
+              label="CheckboxGroup"
+              name="checkboxgroup"
+              options={[
+                { label: 'Apple', value: 'Apple' },
+                { label: 'Pear', value: 'Pear' },
+                { label: 'Orange', value: 'Orange' },
+              ]}
+              value={['Pear']}
+              required
+            />
+            <Radio.Group label="RadioGroup" name="radiogroup" value={1}>
+              <Radio value={1}>A</Radio>
+              <Radio value={2}>B</Radio>
+              <Radio value={3}>C</Radio>
+              <Radio value={4}>D</Radio>
+            </Radio.Group>
             <Select
               //selet设置props.mode后回车都会触发提交表单，这个是antd默认行为
-              label="单选Select"
+              label="Single Select"
               name="single-select"
               required
             >
@@ -119,22 +139,7 @@ class IndexView extends React.Component {
               <Option value="lucy">Lucy</Option>
               <Option value="Yiminghe">yiminghe</Option>
             </Select>
-            <Select
-              mode="multiple"
-              label="多选Select"
-              name="multiple-select"
-              required
-            >
-              <Option value="jack">Jack</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="Yiminghe">yiminghe</Option>
-            </Select>
-            <Select mode="tags" label="标签Select" name="tags-select" required>
-              <Option value="jack">Jack</Option>
-              <Option value="lucy">Lucy</Option>
-              <Option value="Yiminghe">yiminghe</Option>
-            </Select>
-            <Select label="分组Select" name="group-select" required>
+            <Select label="Group Select" name="group-select" required>
               <OptGroup label="Manager">
                 <Option value="jack">Jack</Option>
                 <Option value="lucy">Lucy</Option>
@@ -142,6 +147,21 @@ class IndexView extends React.Component {
               <OptGroup label="Engineer">
                 <Option value="Yiminghe">yiminghe</Option>
               </OptGroup>
+            </Select>
+            <Select
+              mode="multiple"
+              label="Multiple Select"
+              name="multiple-select"
+              required
+            >
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
+            <Select mode="tags" label="Tags Select" name="tags-select" required>
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="Yiminghe">yiminghe</Option>
             </Select>
             <Select
               mode="combobox"
@@ -188,40 +208,12 @@ class IndexView extends React.Component {
               name="weekpicker"
               required
             />
-            <Checkbox.Group
-              label="CheckboxGroup"
-              name="checkboxgroup"
-              options={[
-                { label: 'Apple', value: 'Apple' },
-                { label: 'Pear', value: 'Pear' },
-                { label: 'Orange', value: 'Orange' },
-              ]}
-              value={['Pear']}
-              required
-            />
-            <Radio.Group label="RadioGroup" name="radiogroup" value={1}>
-              <Radio value={1}>A</Radio>
-              <Radio value={2}>B</Radio>
-              <Radio value={3}>C</Radio>
-              <Radio value={4}>D</Radio>
-            </Radio.Group>
             <Cascader
               name="cascader"
               label="Cascader"
               required
               options={this.getCascaderOptions()}
             />
-            {data.map((v, k) => {
-              return (
-                <Input
-                  label={'testt' + k}
-                  name={'testt' + k}
-                  required
-                  type="url"
-                  key={k}
-                />
-              );
-            })}
           </Form>
         </div>
       </LocaleProvider>

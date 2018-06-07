@@ -5,7 +5,7 @@ import isFunction from 'lodash/isFunction';
 import AForm from 'antd/lib/form';
 //内部依赖包
 import event from '../../utils/event';
-import getFieldDecorator from '../../decorator/getFieldDecorator';
+import { validateField } from '../../utils/util';
 import defaultLoacale from '../../locale-provider/zh_CN';
 
 class Form extends React.Component {
@@ -13,21 +13,19 @@ class Form extends React.Component {
     class Decorator extends React.Component {
       static childContextTypes = {
         form: PropTypes.object,
+        FormItem: PropTypes.func,
       };
 
       getChildContext() {
         return {
           form: this.form,
+          //通过context传递给子组件使用，目前basic-component在使用
+          //表单验证都是在这里处理的
+          FormItem: getFormItemComponent(this),
         };
       }
+
       form = {
-        getFieldDecorator: (name, options = {}) => {
-          if (options.initialValue) {
-            //初始化默认值
-            this.fieldsValue[name] = options.initialValue + '';
-          }
-          return getFieldDecorator.bind(this)(name, options);
-        },
         /**
          * 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
          * @param  {array} names name数组
@@ -227,9 +225,218 @@ class Form extends React.Component {
     return <AForm {...other}>{this.props.children}</AForm>;
   }
 }
+function getFormItemComponent(that) {
+  return class extends React.Component {
+    state = {
+      value: this.props.initialValue,
+      //有初始值则需要验证是否合法才给渲染，否则不用。
+      canBeRendered: this.props.initialValue ? false : true,
+    };
+    static contextTypes = {
+      size: PropTypes.string,
+      hasFeedback: PropTypes.bool,
+      labelCol: PropTypes.object,
+      wrapperCol: PropTypes.object,
+      formItemProps: PropTypes.object,
+    };
+    name = this.props.name;
+    componentWillUnmount() {
+      that.off('form-set-field-value-' + this.name);
+    }
+    componentDidMount() {
+      const name = this.name;
+      if (this.props.initialValue) {
+        //设置初始化默认值
+        that.fieldsValue[name] = this.props.initialValue;
+        //验证默认值是否合法
+        this.validateField(name, this.props.initialValue, this.props.rules);
+      }
+      if (!this.props.noFormItem) {
+        that.fieldsValidate[name] = () => {
+          const { value } = this.state;
+          return this.validateField(this.name, value, this.props.rules);
+        };
+      }
+      that.on('form-set-field-value-' + name, value => {
+        this.validateField(this.name, value, this.props.rules);
+      });
+      that.on('form-reset-field-value', names => {
+        const resetValue = () => {
+          this.setState({
+            value: this.props.initialValue,
+            errors: undefined,
+          });
+          that.trigger('form-values', {
+            name,
+            fieldValue: this.props.initialValue,
+          });
+          that.trigger('form-errors', {
+            name,
+          });
+        };
+        if (names && names[0]) {
+          if (!!~names.indexOf(name)) {
+            //names存在值一致的${name}则重置
+            resetValue();
+          }
+        } else if (!name) {
+          resetValue();
+        }
+      });
+    }
+    validateField(name, value, rules) {
+      return new Promise(resolve => {
+        validateField(name, value, rules)(
+          () => {
+            this.setState({
+              value,
+              errors: undefined,
+              canBeRendered: true,
+            });
+            that.trigger('form-values', {
+              name,
+              fieldValue: value,
+            });
+            that.trigger('form-errors', {
+              name,
+            });
+            resolve();
+          },
+          errors => {
+            this.setState({
+              value,
+              errors,
+              canBeRendered: true,
+            });
+            that.trigger('form-values', {
+              name,
+            });
+            that.trigger('form-errors', {
+              name,
+              fieldError: errors,
+            });
+            resolve(errors);
+          }
+        );
+      });
+    }
+    onChange = e => {
+      const { onChange, noFormItem, type } = this.props;
+      let value;
+      if (!e) {
+        value = undefined;
+      } else if (e.target) {
+        value = e.target.value;
+      } else {
+        value = e;
+      }
+      if (type === 'file') {
+        //特殊处理type=file的情况
+        value = e.target.files[0];
+      }
+      if (type === 'checkbox') {
+        //特殊处理type=file的情况
+        if (e.target.checked) {
+          value = e.target.checked;
+        } else {
+          value = '';
+        }
+      }
+      if (!noFormItem) {
+        this.validateField(this.name, value, this.props.rules);
+      } else {
+        this.setState({ value });
+      }
+      onChange && onChange(e);
+    };
+    getErrorMessage() {
+      if (!this.props.noFormItem) {
+        const { errors } = this.state;
+        let message = '';
+        errors &&
+          errors.forEach((v, k) => {
+            if (k !== 0) {
+              message += ',' + v.message;
+            } else {
+              message += v.message;
+            }
+          });
+        return message;
+      }
+    }
+    getValidateStatus() {
+      if (!this.props.noFormItem) {
+        const { errors, value } = this.state;
+        if (errors) {
+          return 'error';
+        } else if (value) {
+          return 'success';
+        }
+      }
+    }
+    renderItem(otherItemProps) {
+      const context = this.context;
+      this.deleteUnuseProps(otherItemProps);
+      const { children, ...other } = otherItemProps;
+      return React.cloneElement(children, {
+        size: context.size,
+        ...other,
+        onChange: this.onChange,
+        id: 'afc-form-item-' + name,
+      });
+    }
+    deleteUnuseProps(otherItemProps) {
+      delete otherItemProps.onlyLetter;
+      delete otherItemProps.min;
+      delete otherItemProps.max;
+      delete otherItemProps.initialValue;
+      delete otherItemProps.name;
+    }
+    render() {
+      if (!this.state.canBeRendered) {
+        return false;
+      }
+      const help = this.getErrorMessage();
+      const validateStatus = this.getValidateStatus();
+      const context = this.context;
+      const { required, label, noFormItem, ...otherItemProps } = this.props;
+      if (otherItemProps.type !== 'file') {
+        //input type=file是不受控表单
+        otherItemProps.value = this.state.value;
+      }
+      let hasFeedback = context.hasFeedback;
+      if (
+        otherItemProps.type === 'radio-group' ||
+        otherItemProps.type === 'checkbox' ||
+        otherItemProps.type === 'checkbox-group'
+      ) {
+        //checkbox不需要feedback提示，影响布局美观
+        hasFeedback = false;
+      }
+      if (noFormItem || otherItemProps.type === 'hidden') {
+        return this.renderItem(otherItemProps);
+      } else {
+        return (
+          <AForm.Item
+            hasFeedback={hasFeedback}
+            wrapperCol={context.wrapperCol}
+            labelCol={context.labelCol}
+            {...context.formItemProps}
+            help={help}
+            validateStatus={validateStatus}
+            label={label}
+            required={required}
+          >
+            {this.renderItem(otherItemProps)}
+          </AForm.Item>
+        );
+      }
+    }
+  };
+}
 Form.Item = class FormItem extends React.Component {
   //Form.Item只是为了传递props到antd的Form.Item
-  //如果没用到，可以不使用。
+  //如果没用到Form.Item的props，可以不使用。
   static childContextTypes = {
     formItemProps: PropTypes.object,
   };
@@ -242,4 +449,5 @@ Form.Item = class FormItem extends React.Component {
     return this.props.children;
   }
 };
+
 export default Form;
