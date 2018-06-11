@@ -192,6 +192,7 @@ class Form extends React.Component {
     hasFeedback: PropTypes.bool,
     labelCol: PropTypes.object,
     wrapperCol: PropTypes.object,
+    trigger: PropTypes.string,
     locale: PropTypes.object,
   };
   static contextTypes = {
@@ -202,6 +203,7 @@ class Form extends React.Component {
     hasFeedback: PropTypes.bool,
     labelCol: PropTypes.object,
     wrapperCol: PropTypes.object,
+    trigger: PropTypes.string,
     locale: PropTypes.object,
   };
   getChildContext() {
@@ -211,6 +213,7 @@ class Form extends React.Component {
       labelCol: this.props.labelCol,
       wrapperCol: this.props.wrapperCol,
       locale: this.locale,
+      trigger: this.props.trigger,
     };
   }
   get locale() {
@@ -244,6 +247,7 @@ function getFormItemComponent(that) {
       labelCol: PropTypes.object,
       wrapperCol: PropTypes.object,
       formItemProps: PropTypes.object,
+      trigger: PropTypes.string,
       //是否是group组件，如InputGroup，目前只有这个InputGroup传递了这个参数
       isGroup: PropTypes.bool,
     };
@@ -274,6 +278,7 @@ function getFormItemComponent(that) {
           this.setState({
             value: initialValue,
             errors: undefined,
+            validateStatus: undefined,
           });
           that.trigger('form-values', {
             name,
@@ -300,6 +305,7 @@ function getFormItemComponent(that) {
             this.setState({
               value,
               errors: undefined,
+              validateStatus: 'success',
               canBeRendered: true,
             });
             that.trigger('form-values', {
@@ -315,6 +321,7 @@ function getFormItemComponent(that) {
             this.setState({
               value,
               errors,
+              validateStatus: 'error',
               canBeRendered: true,
             });
             that.trigger('form-values', {
@@ -329,8 +336,8 @@ function getFormItemComponent(that) {
         );
       });
     }
-    onChange = e => {
-      const { onChange, noFormItem, type } = this.props;
+    onChangeOrBlurEvent = (e, shouldValidate) => {
+      const { noFormItem, type } = this.props;
       let value;
       if (!e) {
         value = undefined;
@@ -351,11 +358,25 @@ function getFormItemComponent(that) {
           value = '';
         }
       }
-      if (!noFormItem) {
+      if (!noFormItem && shouldValidate) {
         this.validateField(this.name, value, this.props.rules);
       } else {
         this.setState({ value });
       }
+    };
+    trigger = this.props.trigger || this.context.trigger || 'onChange';
+    onBlur = e => {
+      const trigger = this.trigger;
+      if (trigger === 'onBlur') {
+        this.onChangeOrBlurEvent(e, trigger === 'onBlur');
+      }
+      const { onBlur } = this.props;
+      onBlur && onBlur(e);
+    };
+    onChange = e => {
+      const trigger = this.trigger;
+      this.onChangeOrBlurEvent(e, trigger === 'onChange');
+      const { onChange } = this.props;
       onChange && onChange(e);
     };
     getErrorMessage() {
@@ -373,16 +394,7 @@ function getFormItemComponent(that) {
         return message;
       }
     }
-    getValidateStatus() {
-      if (!this.props.noFormItem) {
-        const { errors, value } = this.state;
-        if (errors) {
-          return 'error';
-        } else if (value) {
-          return 'success';
-        }
-      }
-    }
+    //渲染表单组件
     renderItem(otherItemProps) {
       const context = this.context;
       this.deleteUnuseProps(otherItemProps);
@@ -391,6 +403,7 @@ function getFormItemComponent(that) {
         size: context.size,
         ...other,
         onChange: this.onChange,
+        onBlur: this.onBlur,
         id: 'afc-form-item-' + this.name,
       });
     }
@@ -400,13 +413,15 @@ function getFormItemComponent(that) {
       delete otherItemProps.max;
       delete otherItemProps.initialValue;
       delete otherItemProps.rules;
+      delete otherItemProps.trigger;
+      delete otherItemProps.aliasLabel;
     }
     render() {
-      if (!this.state.canBeRendered) {
+      const { validateStatus, canBeRendered } = this.state;
+      if (!canBeRendered) {
         return false;
       }
-      const help = this.getErrorMessage();
-      const validateStatus = this.getValidateStatus();
+      const errorMessage = this.getErrorMessage();
       const context = this.context;
       const { required, label, noFormItem, ...otherItemProps } = this.props;
       if (otherItemProps.type !== 'file') {
@@ -414,7 +429,10 @@ function getFormItemComponent(that) {
         otherItemProps.value = this.state.value;
       }
       let hasFeedback = context.hasFeedback;
-      if (
+      if (this.trigger === 'onBlur') {
+        //onBlur时，feedback用户体验不好，直接禁止
+        hasFeedback = false;
+      } else if (
         otherItemProps.type === 'radio-group' ||
         otherItemProps.type === 'checkbox' ||
         otherItemProps.type === 'checkbox-group'
@@ -431,7 +449,7 @@ function getFormItemComponent(that) {
             wrapperCol={context.wrapperCol}
             labelCol={context.labelCol}
             {...context.formItemProps}
-            help={help}
+            help={errorMessage}
             validateStatus={validateStatus}
             label={label}
             required={required}
