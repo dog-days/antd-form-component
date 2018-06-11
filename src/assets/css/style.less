@@ -6,3 +6,12 @@
 .ant-form input[type='file'] {
   display: inline-block;
 }
+//处理input-group select的问题
+form
+  .afc-input-group
+  .has-feedback
+  :not(.ant-input-group-addon)
+  > .ant-select
+  .ant-select-arrow {
+  right: 11px;
+}

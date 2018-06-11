@@ -131,6 +131,7 @@ Input.Group = class InputGroup extends React.Component {
     } else {
       return (
         <AForm.Item
+          className="afc-input-group"
           hasFeedback={context.hasFeedback}
           wrapperCol={context.wrapperCol}
           labelCol={context.labelCol}
