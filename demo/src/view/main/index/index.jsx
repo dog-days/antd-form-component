@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { LocaleProvider } from 'antd';
+import { LocaleProvider, Button } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {
   Form,
@@ -75,17 +75,28 @@ class IndexView extends React.Component {
       <LocaleProvider locale={zhCN}>
         <div>
           {true && (
-            <button
+            <Button
+              type="primary"
+              style={{ width: '100%' }}
               onClick={() => {
                 const values = form.getFieldsValue();
                 const errors = form.getFieldsError();
                 console.log(values, errors);
-                // form.resetFields(['test2']);
-                this.setState({ value: Math.random() });
               }}
             >
-              test
-            </button>
+              获取表单值和错误提示（错误需要触发，请查看console）
+            </Button>
+          )}
+          {true && (
+            <Button
+              type="primary"
+              style={{ width: '100%', marginTop: 10 }}
+              onClick={() => {
+                form.resetFields();
+              }}
+            >
+              重置
+            </Button>
           )}
           <Form
             onSubmit={e => {
@@ -99,15 +110,16 @@ class IndexView extends React.Component {
             labelCol={{ span: 4 }}
             wrapperCol={{ span: 20 }}
           >
-            {true && <button>提交</button>}
-            <Input
-              name="Text"
-              required
-              placeholder="test"
-              label="text"
-              // value={this.state.value}
-              value="text"
-            />
+            {true && (
+              <Button
+                type="primary"
+                htmlType="submit"
+                style={{ width: '100%', margin: '10px 0 10px 0' }}
+              >
+                提交
+              </Button>
+            )}
+            <Input name="text" required label="Text" value="text" />
             <InputNumber label="InputNumber" name="input-number" required />
             <Input label="Email" name="email" required type="email" />
             <Input label="Url" name="url" required type="url" />
@@ -120,9 +132,9 @@ class IndexView extends React.Component {
                 <Option value="Company">Company</Option>
               </Select>
               <Input
-                name="address"
+                name="info"
                 style={{ width: '70%' }}
-                placeholder="请填写地址"
+                placeholder="请填写留言"
                 required
                 min={2}
               />

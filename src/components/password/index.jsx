@@ -54,11 +54,19 @@ export default class Password extends BasicComponent {
   };
 
   render() {
-    const { rePassword, checkPassword, rules = [], ...other } = this.props;
+    const {
+      rePassword,
+      type = 'password',
+      checkPassword,
+      rules = [],
+      ...other
+    } = this.props;
     const locale = this.locale;
     return (
       <span>
         <Input
+          autoComplete="new-password"
+          type={type}
           {...other}
           onChange={this.onPasswordChange}
           rules={[...rules, ...this.getOnlyLetterAndNumberRule()]}
@@ -66,6 +74,8 @@ export default class Password extends BasicComponent {
         {(rePassword || checkPassword) && (
           //rePassword视为了兼容之前的formBuilder的api
           <Input
+            autoComplete="new-password"
+            type={type}
             {...other}
             label={locale.afcPassword.checkLabel}
             name={`check-${other.name}`}

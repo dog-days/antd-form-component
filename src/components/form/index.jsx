@@ -288,7 +288,7 @@ function getFormItemComponent(that) {
             //names存在值一致的${name}则重置
             resetValue();
           }
-        } else if (!name) {
+        } else if (!names) {
           resetValue();
         }
       });
@@ -399,7 +399,6 @@ function getFormItemComponent(that) {
       delete otherItemProps.min;
       delete otherItemProps.max;
       delete otherItemProps.initialValue;
-      delete otherItemProps.name;
       delete otherItemProps.rules;
     }
     render() {

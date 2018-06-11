@@ -116,7 +116,7 @@ Input.Group = class InputGroup extends React.Component {
     return message;
   }
   getValidateStatus(errorMessage) {
-    if (errorMessage !== undefined) {
+    if (errorMessage) {
       return errorMessage ? 'error' : 'success';
     }
   }
