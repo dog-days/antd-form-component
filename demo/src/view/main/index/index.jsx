@@ -96,6 +96,8 @@ class IndexView extends React.Component {
             }}
             hasFeedback
             size="default"
+            labelCol={{ span: 4 }}
+            wrapperCol={{ span: 20 }}
           >
             {true && <button>提交</button>}
             <Input
@@ -112,6 +114,19 @@ class IndexView extends React.Component {
             <Input label="File" name="file" required type="file" />
             <Input.TextArea autosize label="描述" name="textarea" required />
             <Password name="parssword" label="密码" required checkPassword />
+            <Input.Group compact label={'InputGroup'}>
+              <Select name="address-type" style={{ width: '30%' }} value="Home">
+                <Option value="Home">Home</Option>
+                <Option value="Company">Company</Option>
+              </Select>
+              <Input
+                name="address"
+                style={{ width: '70%' }}
+                placeholder="请填写地址"
+                required
+                min={2}
+              />
+            </Input.Group>
             <Checkbox.Group
               label="CheckboxGroup"
               name="checkboxgroup"

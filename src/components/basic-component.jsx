@@ -19,9 +19,10 @@ import commonContextDecorator from '../decorator/commonContext';
  * 如果覆盖了render则，用不到componentType、currentAntdComponent、getSepcialRuleByType、getDefaultRules
  */
 export default class BasicComponent extends React.Component {
+  static displayName = 'AntdFormComponent';
   //这里把所有基础表单组件的propTypes都定义了
   static propTypes = {
-    name: PropTypes.string.isRequired,
+    name: PropTypes.string,
     label: PropTypes.string,
     type: PropTypes.string,
     rules: PropTypes.array,

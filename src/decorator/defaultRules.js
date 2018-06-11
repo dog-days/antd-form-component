@@ -1,6 +1,5 @@
 // import React from 'react';
 import { sprintf } from 'sprintf-js';
-import isString from 'lodash/isString';
 
 import { strlen } from '../utils/util';
 /**
@@ -16,7 +15,7 @@ function getLenthRule(min, max, locale) {
     {
       validator(rule, value, callback) {
         const errors = [];
-        if (isString(value)) {
+        if (value) {
           const valueLength = strlen(value);
           let flag = true;
           if (min && max) {
@@ -62,7 +61,7 @@ function getDefaultRules(componentType, locale, label) {
       message: sprintf(locale.afcCommon.isRequired, label),
     });
   }
-  if (componentType === 'text') {
+  if (componentType === 'text' || componentType === 'password') {
     if (onlyLetter) {
       defaultRules.push({
         validator(rule, value, callback) {

@@ -14,6 +14,7 @@ class Form extends React.Component {
       static childContextTypes = {
         form: PropTypes.object,
         FormItem: PropTypes.func,
+        on: PropTypes.func,
       };
 
       getChildContext() {
@@ -22,6 +23,7 @@ class Form extends React.Component {
           //通过context传递给子组件使用，目前basic-component在使用
           //表单验证都是在这里处理的
           FormItem: getFormItemComponent(this),
+          on: this.on.bind(this),
         };
       }
 
@@ -105,14 +107,18 @@ class Form extends React.Component {
             fieldsValidate = this.fieldsValidate;
           } else if (names && names[0]) {
             names.forEach(v => {
-              fieldsValidate[v] = this.fieldsValue[v];
+              fieldsValidate[v] = this.fieldsValidate[v];
             });
           } else {
             fieldsValidate = this.fieldsValidate;
           }
           const fieldsValidateArray = [];
           for (let k in fieldsValidate) {
-            fieldsValidateArray.push(fieldsValidate[k]());
+            if (fieldsValidate[k]) {
+              fieldsValidateArray.push(fieldsValidate[k]());
+            } else {
+              console.warn(`表单控件${k} 验证不存在`);
+            }
           }
           Promise.all(fieldsValidateArray)
             .then(errors => {
@@ -238,6 +244,8 @@ function getFormItemComponent(that) {
       labelCol: PropTypes.object,
       wrapperCol: PropTypes.object,
       formItemProps: PropTypes.object,
+      //是否是group组件，如InputGroup，目前只有这个InputGroup传递了这个参数
+      isGroup: PropTypes.bool,
     };
     name = this.props.name;
     componentWillUnmount() {
@@ -245,30 +253,31 @@ function getFormItemComponent(that) {
     }
     componentDidMount() {
       const name = this.name;
-      if (this.props.initialValue) {
+      const { initialValue, rules } = this.props;
+      if (initialValue) {
         //设置初始化默认值
-        that.fieldsValue[name] = this.props.initialValue;
+        that.fieldsValue[name] = initialValue;
         //验证默认值是否合法
-        this.validateField(name, this.props.initialValue, this.props.rules);
+        this.validateField(name, initialValue, rules);
       }
       if (!this.props.noFormItem) {
         that.fieldsValidate[name] = () => {
           const { value } = this.state;
-          return this.validateField(this.name, value, this.props.rules);
+          return this.validateField(this.name, value, rules);
         };
       }
       that.on('form-set-field-value-' + name, value => {
-        this.validateField(this.name, value, this.props.rules);
+        this.validateField(this.name, value, rules);
       });
       that.on('form-reset-field-value', names => {
         const resetValue = () => {
           this.setState({
-            value: this.props.initialValue,
+            value: initialValue,
             errors: undefined,
           });
           that.trigger('form-values', {
             name,
-            fieldValue: this.props.initialValue,
+            fieldValue: initialValue,
           });
           that.trigger('form-errors', {
             name,
@@ -382,7 +391,7 @@ function getFormItemComponent(that) {
         size: context.size,
         ...other,
         onChange: this.onChange,
-        id: 'afc-form-item-' + name,
+        id: 'afc-form-item-' + this.name,
       });
     }
     deleteUnuseProps(otherItemProps) {
@@ -391,6 +400,7 @@ function getFormItemComponent(that) {
       delete otherItemProps.max;
       delete otherItemProps.initialValue;
       delete otherItemProps.name;
+      delete otherItemProps.rules;
     }
     render() {
       if (!this.state.canBeRendered) {
@@ -413,7 +423,7 @@ function getFormItemComponent(that) {
         //checkbox不需要feedback提示，影响布局美观
         hasFeedback = false;
       }
-      if (noFormItem || otherItemProps.type === 'hidden') {
+      if (noFormItem || otherItemProps.type === 'hidden' || context.isGroup) {
         return this.renderItem(otherItemProps);
       } else {
         return (
