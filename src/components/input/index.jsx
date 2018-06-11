@@ -8,6 +8,7 @@ import BasicComponent from '../basic-component';
 
 export default class Input extends BasicComponent {
   currentAntdComponent = AInput;
+  localeKey = 'afcInput';
   getSepcialRuleByType(type) {
     //继承父类可能有的rules
     const rules = super.getSepcialRuleByType();
@@ -79,17 +80,18 @@ Input.Group = class InputGroup extends React.Component {
   }
   componentWillMount() {
     const names = this.getChildrenNames();
-    this.context.on('form-errors', ({ name, fieldError }) => {
-      if (!!~names.indexOf(name)) {
-        //只处理input-group里表单组件的错误
-        this.setState({
-          fieldsError: {
-            ...this.state.fieldsError,
-            [name]: fieldError,
-          },
-        });
-      }
-    });
+    this.context.on &&
+      this.context.on('form-errors', ({ name, fieldError }) => {
+        if (!!~names.indexOf(name)) {
+          //只处理input-group里表单组件的错误
+          this.setState({
+            fieldsError: {
+              ...this.state.fieldsError,
+              [name]: fieldError,
+            },
+          });
+        }
+      });
   }
   getErrorMessage() {
     const { fieldsError } = this.state;

@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import isFunction from 'lodash/isFunction';
 import AForm from 'antd/lib/form';
+import merge from 'lodash/merge';
 //内部依赖包
 import event from '../../utils/event';
 import { validateField } from '../../utils/util';
@@ -205,6 +206,8 @@ class Form extends React.Component {
     wrapperCol: PropTypes.object,
     trigger: PropTypes.string,
     locale: PropTypes.object,
+    //是否使用了Form
+    useForm: PropTypes.bool,
   };
   getChildContext() {
     return {
@@ -214,14 +217,11 @@ class Form extends React.Component {
       wrapperCol: this.props.wrapperCol,
       locale: this.locale,
       trigger: this.props.trigger,
+      useForm: true,
     };
   }
   get locale() {
-    return {
-      ...defaultLoacale,
-      ...this.context.antLocale,
-      ...this.props.locale,
-    };
+    return merge(defaultLoacale, this.context.antLocale, this.props.locale);
   }
   render() {
     const { ...other } = this.props;

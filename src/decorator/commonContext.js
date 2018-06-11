@@ -7,6 +7,7 @@ export default function(component) {
     form: PropTypes.object,
     FormItem: PropTypes.func,
     locale: PropTypes.object,
+    useForm: PropTypes.bool,
   };
   return component;
 }

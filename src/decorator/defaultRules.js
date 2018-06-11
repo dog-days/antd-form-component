@@ -53,6 +53,10 @@ function getLenthRule(min, max, locale) {
  * @return {array}  async-validator的某个字段rules
  */
 function getDefaultRules(componentType, locale, label) {
+  if (!this.context.form || !this.context.useForm) {
+    //没有使用form.create()，也没有使用<Form />
+    return [];
+  }
   const { required, min, max, onlyLetter } = this.props;
   let defaultRules = [];
   if (required) {

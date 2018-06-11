@@ -6,6 +6,7 @@ import BasicComponent from '../basic-component';
 import Input from '../input';
 
 export default class Password extends BasicComponent {
+  localeKey = 'afcPassword';
   state = { passwordValue: '' };
   getChekckPasswordRule() {
     const locale = this.locale;

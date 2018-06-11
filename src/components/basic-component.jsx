@@ -1,6 +1,7 @@
 //外部依赖包
 import React from 'react';
 import PropTypes from 'prop-types';
+import merge from 'lodash/merge';
 
 import defaultRulesDecorator from '../decorator/defaultRules';
 import validateDecorator from '../decorator/validate';
@@ -37,21 +38,30 @@ export default class BasicComponent extends React.Component {
     //password
     checkPassword: PropTypes.bool,
   };
-  //定义组件类型
+  //定义组件类型，如果组件props.type没有设置，则用组件默认设置的
+  //继承此类，看情况覆盖这个属性
   componentType = 'text';
   //定义当前需要用到的antd表单组件
   currentAntdComponent = undefined;
+  //当前组件的locale对象，如input的是afcInput
+  localeKey = undefined;
   //设置特殊的async-validator rules
   getSepcialRuleByType() {
     return [];
   }
   get locale() {
     if (!this._tempLocale) {
+      let currentComponentLocale = {};
+      if (this.localeKey) {
+        currentComponentLocale = {
+          [this.localeKey]: this.props.locale || {},
+        };
+      }
       //context.locale是getter
-      this._tempLocale = {
-        ...this.context.locale,
-        ...this.props.locale,
-      };
+      this._tempLocale = merge(
+        this.context.locale || {},
+        currentComponentLocale
+      );
     }
     return this._tempLocale;
   }
