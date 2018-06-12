@@ -80,8 +80,6 @@ export default class Password extends BasicComponent {
             {...other}
             label={locale.afcPassword.checkLabel}
             name={`check-${other.name}`}
-            //不需要required
-            required={false}
             rules={this.getChekckPasswordRule()}
           />
         )}
