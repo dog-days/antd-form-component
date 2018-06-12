@@ -65,14 +65,7 @@ export default class BasicComponent extends React.Component {
     }
     return this._tempLocale;
   }
-  render() {
-    if (!this.context.form) {
-      //如果没有使用Form.create()
-      return <this.currentAntdComponent {...this.props} />;
-    }
-    if (!this.currentAntdComponent) {
-      console.error('继承BasicComponent，必须定义currentAntdComponent');
-    }
+  renderFormItem(item, otherProps) {
     const { FormItem } = this.context;
     let { children, name, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);
@@ -97,9 +90,25 @@ export default class BasicComponent extends React.Component {
           ...specialRules,
           ...rules,
         ]}
+        {...otherProps}
       >
-        <this.currentAntdComponent>{children}</this.currentAntdComponent>
+        {item}
       </FormItem>
     );
+  }
+  render() {
+    if (!this.currentAntdComponent) {
+      console.error('继承BasicComponent，必须定义currentAntdComponent');
+    }
+    //如果没有使用Form.create()
+    const component = (
+      <this.currentAntdComponent>
+        {this.props.children}
+      </this.currentAntdComponent>
+    );
+    if (!this.context.form) {
+      return component;
+    }
+    return this.renderFormItem(component);
   }
 }

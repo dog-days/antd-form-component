@@ -13,6 +13,7 @@ import {
   Radio,
   Cascader,
   Password,
+  // ArrayInput,
 } from 'antd-form-component';
 
 const Option = Select.Option;
@@ -22,11 +23,11 @@ const OptGroup = Select.OptGroup;
 class IndexView extends React.Component {
   state = {};
   componentDidMount() {
-    const { form } = this.props;
-    form.setFieldsValue({
-      email: 'email@qq.com',
-      url: 'http://www.localhost.com',
-    });
+    // const { form } = this.props;
+    // form.setFieldsValue({
+    //   email: 'email@qq.com',
+    //   url: 'http://www.localhost.com',
+    // });
   }
   getCascaderOptions() {
     return [
@@ -74,30 +75,6 @@ class IndexView extends React.Component {
       //antd默认的多语言是英文，设置为中文如下
       <LocaleProvider locale={zhCN}>
         <div>
-          {true && (
-            <Button
-              type="primary"
-              style={{ width: '100%' }}
-              onClick={() => {
-                const values = form.getFieldsValue();
-                const errors = form.getFieldsError();
-                console.log(values, errors);
-              }}
-            >
-              获取表单值和错误提示（错误需要触发，请查看console）
-            </Button>
-          )}
-          {true && (
-            <Button
-              type="primary"
-              style={{ width: '100%', marginTop: 10 }}
-              onClick={() => {
-                form.resetFields();
-              }}
-            >
-              重置
-            </Button>
-          )}
           <Form
             onSubmit={e => {
               e.preventDefault();
@@ -113,8 +90,32 @@ class IndexView extends React.Component {
             {true && (
               <Button
                 type="primary"
+                style={{ width: '100%', marginTop: 20 }}
+                onClick={() => {
+                  const values = form.getFieldsValue();
+                  const errors = form.getFieldsError();
+                  console.log(values, errors);
+                }}
+              >
+                获取表单值和错误提示（错误需要触发，请查看console）
+              </Button>
+            )}
+            {true && (
+              <Button
+                type="primary"
+                style={{ width: '100%', marginTop: 20 }}
+                onClick={() => {
+                  form.resetFields();
+                }}
+              >
+                重置
+              </Button>
+            )}
+            {true && (
+              <Button
+                type="primary"
                 htmlType="submit"
-                style={{ width: '100%', margin: '10px 0 10px 0' }}
+                style={{ width: '100%', margin: '20px 0' }}
               >
                 提交
               </Button>

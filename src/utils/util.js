@@ -44,3 +44,10 @@ export function strlen(str) {
   }
   return len;
 }
+export function randomKey() {
+  return Math.random()
+    .toString(36)
+    .substring(7)
+    .split('')
+    .join('');
+}

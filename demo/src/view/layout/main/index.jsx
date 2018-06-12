@@ -19,11 +19,13 @@ class MainLayout extends React.Component {
     const { children, params } = this.props;
     return (
       <div className="layout-container">
-        <Menu selectedKeys={[params.viewId]} mode="horizontal">
-          {this.renderItem('基本使用', 'index')}
-          {this.renderItem('自定义联动', '')}
-        </Menu>
-        <div className="main-contents">{children}</div>
+        <div className="main-contents">
+          <Menu selectedKeys={[params.viewId]} mode="horizontal">
+            {this.renderItem('基本使用', 'index')}
+            {this.renderItem('自定义联动', '')}
+          </Menu>
+          {children}
+        </div>
       </div>
     );
   }
