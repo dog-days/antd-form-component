@@ -275,11 +275,15 @@ function getFormItemComponent(that) {
       });
       that.on('form-reset-field-value', names => {
         const resetValue = () => {
-          this.setState({
-            value: initialValue,
-            errors: undefined,
-            validateStatus: undefined,
-          });
+          if (initialValue) {
+            this.validateField(name, initialValue, rules);
+          } else {
+            this.setState({
+              value: initialValue,
+              errors: undefined,
+              validateStatus: undefined,
+            });
+          }
           that.trigger('form-values', {
             name,
             fieldValue: initialValue,
