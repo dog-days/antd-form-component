@@ -7,7 +7,7 @@ node_modules/
 /demo/build/
 /dist
 demo-build/
-/libs/
+/lib/
 /es/
 .DS_Store
 *.tgz

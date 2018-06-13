@@ -1,5 +1,8 @@
 {
-  "version": "0.0.1",
+  "version": "0.0.3",
+  "main": "lib/index.js",
+  "jsnext:main": "es/index.js",
+  "module": "es/index.js",
   "dependencies": {
     "async-validator": "^1.8.2",
     "classnames": "^2.2.5",
@@ -8,7 +11,7 @@
     "sprintf-js": "^1.1.1"
   },
   "devDependencies": {
-    "antd": "^2.13.7",
+    "antd": "^3.6.2",
     "babel-cli": "^6.26.0",
     "chai": "4.1.2",
     "cross-env": "^5.1.1",
@@ -55,12 +58,13 @@
       "npm run test && npm run build-css && npm run transform && npm publish",
     "prettier": "prettier --write './**/*(*.js|*.jsx|*.less|*.css)'",
     "transform":
-      "npm run transform-es && npm run transform-default && cp -R ./src/assets ./libs && cp -R ./src/assets ./es",
-    "transform-es": "cross-env BABEL_ENV=es babel ./src -d es",
+      "npm run transform-es && npm run transform-default && cp -R ./src/assets ./lib && cp -R ./src/assets ./es",
+    "transform-es": "rm -rf es && cross-env BABEL_ENV=es babel ./src -d es",
     "transform-es-watch": "cross-env BABEL_ENV=es babel ./src -d es -w",
-    "transform-default": "cross-env BABEL_ENV=production babel ./src -d libs",
+    "transform-default":
+      "rm -rf ./lib && cross-env BABEL_ENV=production babel ./src -d lib",
     "transform-default-watch":
-      "cross-env BABEL_ENV=default babel ./src -d libs -w"
+      "cross-env BABEL_ENV=default babel ./src -d lib -w"
   },
   "husky": {
     "hooks": {
@@ -78,20 +82,40 @@
     "appPublicPath": "demo/public"
   },
   "babel": {
-    "presets": [
-      "react",
-      [
-        "es2015",
-        {
-          "modules": false
-        }
-      ],
-      "stage-0"
-    ],
-    "plugins": ["transform-decorators-legacy", "transform-runtime"],
     "env": {
       "development": {
-        "plugins": ["react-hot-loader/babel"]
+        "presets": [
+          "react",
+          [
+            "es2015",
+            {
+              "modules": false
+            }
+          ],
+          "stage-0"
+        ],
+        "plugins": [
+          "transform-decorators-legacy",
+          "transform-runtime",
+          "react-hot-loader/babel"
+        ]
+      },
+      "production": {
+        "plugins": ["transform-decorators-legacy", "transform-runtime"],
+        "presets": ["react", "es2015", "stage-0"]
+      },
+      "es": {
+        "plugins": ["transform-decorators-legacy", "transform-runtime"],
+        "presets": [
+          "react",
+          [
+            "es2015",
+            {
+              "modules": false
+            }
+          ],
+          "stage-0"
+        ]
       }
     }
   },
