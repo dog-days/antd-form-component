@@ -221,11 +221,11 @@ class Test extends React.Component {
     return (
       <Form>
         <Input
-          name="text"
+          name="email"
           required
-          label="Text"
-          value="text"
-          locale={{ afcInput: { emailFormat: '电子邮件格式不正确' } }}
+          label="Email"
+          type="email"
+          locale={{ emailFormat: '电子邮件格式不正确' }}
         />
       </Form>
     );
