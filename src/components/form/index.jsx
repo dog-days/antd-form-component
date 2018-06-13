@@ -132,12 +132,20 @@ class Form extends React.Component {
           Promise.all(fieldsValidateArray)
             .then(errors => {
               let fieldsError;
-              errors.forEach(v => {
+              errors.forEach((v, isArrayInput) => {
                 if (v && v[0] && v[0].field) {
                   if (!fieldsError) {
                     fieldsError = {};
                   }
-                  fieldsError[v[0].field] = v;
+                  if (isArrayInput) {
+                    const arrayItemName = v[0].field.split('_-_')[0];
+                    if (!fieldsError[arrayItemName]) {
+                      fieldsError[arrayItemName] = [];
+                    }
+                    fieldsError[arrayItemName].push(v);
+                  } else {
+                    fieldsError[v[0].field] = v;
+                  }
                 }
               });
               return fieldsError;
@@ -409,7 +417,7 @@ function getFormItemComponent(that) {
             });
             this.triggerFormValue(name);
             this.triggerFormError(name, errors);
-            resolve(errors);
+            resolve(errors, this.context.isArrayInput);
           }
         );
       });
