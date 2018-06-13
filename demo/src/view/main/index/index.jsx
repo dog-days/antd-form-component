@@ -1,7 +1,7 @@
 import React from 'react';
 import moment from 'moment';
 import { LocaleProvider, Button, AutoComplete } from 'antd';
-import zhCN from 'antd/lib/locale-provider/zh_CN';
+// import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {
   Form,
   Input,
@@ -72,8 +72,8 @@ class IndexView extends React.Component {
     const monthFormat = 'YYYY/MM';
 
     return (
-      //antd默认的多语言是英文，设置为中文如下
-      <LocaleProvider locale={zhCN}>
+      //antd v3.x.x默认的多语言是英文
+      <LocaleProvider>
         <div>
           <Form
             onSubmit={e => {

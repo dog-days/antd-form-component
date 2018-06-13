@@ -20,4 +20,11 @@ DatePicker.MonthPicker = class MonthPicker extends BasicComponent {
 DatePicker.WeekPicker = class WeekPicker extends BasicComponent {
   componentType = 'week-picker';
   currentAntdComponent = ADatePicker.WeekPicker;
+  render() {
+    if (!ADatePicker.WeekPicker) {
+      console.error('antd@2.x.x没有WeekPicker组件，请在antd@3.0.0以上使用。');
+      return false;
+    }
+    return super.render();
+  }
 };
