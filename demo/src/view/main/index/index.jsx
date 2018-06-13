@@ -1,6 +1,6 @@
 import React from 'react';
 import moment from 'moment';
-import { LocaleProvider, Button } from 'antd';
+import { LocaleProvider, Button, AutoComplete } from 'antd';
 import zhCN from 'antd/lib/locale-provider/zh_CN';
 import {
   Form,
@@ -78,6 +78,7 @@ class IndexView extends React.Component {
           <Form
             onSubmit={e => {
               e.preventDefault();
+              e.stopPropagation();
               form.validateFields((err, values) => {
                 console.log(err, values);
               });
@@ -120,6 +121,7 @@ class IndexView extends React.Component {
                 提交
               </Button>
             )}
+
             <Input name="text" required label="Text" value="text" />
             <ArrayInput name="array" required label="Array" value={[1, 2, 3]} />
             <InputNumber label="InputNumber" name="input-number" required />
@@ -128,6 +130,14 @@ class IndexView extends React.Component {
             <Input label="File" name="file" required type="file" />
             <Input.TextArea autosize label="描述" name="textarea" required />
             <Password name="parssword" label="密码" required checkPassword />
+            {//自定义新组件
+            form.getFieldDecorator('autocomplete', {
+              label: 'AutoComplete',
+              initialValue: '2',
+              required: true,
+              //这样也可以
+              // dataSource: ['12345', '23456', '34567'],
+            })(<AutoComplete dataSource={['12345', '23456', '34567']} />)}
             <Input.Group compact label={'InputGroup'}>
               <Select name="address-type" style={{ width: '30%' }} value="Home">
                 <Option value="Home">Home</Option>

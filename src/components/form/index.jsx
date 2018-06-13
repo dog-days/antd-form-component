@@ -12,6 +12,7 @@ import {
   findAllReactComponentsByType,
 } from '../../utils/util';
 import defaultLoacale from '../../locale-provider/zh_CN';
+import BasicComponent from '../basic-component';
 
 class Form extends React.Component {
   static create() {
@@ -37,6 +38,23 @@ class Form extends React.Component {
       }
 
       form = {
+        getFieldDecorator(name, props) {
+          return component => {
+            function newComponent(props) {
+              return React.cloneElement(component, props);
+            }
+            class AntdFormComponent extends BasicComponent {
+              currentAntdComponent = newComponent;
+            }
+            return (
+              <AntdFormComponent
+                {...props}
+                name={name}
+                value={props.initialValue}
+              />
+            );
+          };
+        },
         /**
          * 获取一组输入控件的 Error ，如不传入参数，则获取全部组件的 Error
          * @param  {array} names name数组
