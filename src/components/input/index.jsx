@@ -6,6 +6,8 @@ import AForm from 'antd/lib/form';
 //内部依赖包
 import BasicComponent from '../basic-component';
 
+AInput.displayName = 'OriginalAntdComponent';
+
 export default class Input extends BasicComponent {
   currentAntdComponent = AInput;
   localeKey = 'afcInput';

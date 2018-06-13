@@ -6,7 +6,11 @@ import AForm from 'antd/lib/form';
 import merge from 'lodash/merge';
 //内部依赖包
 import event from '../../utils/event';
-import { validateField } from '../../utils/util';
+import {
+  validateField,
+  toUpperCaseByPosition,
+  findAllReactComponentsByType,
+} from '../../utils/util';
 import defaultLoacale from '../../locale-provider/zh_CN';
 
 class Form extends React.Component {
@@ -16,6 +20,8 @@ class Form extends React.Component {
         form: PropTypes.object,
         FormItem: PropTypes.func,
         on: PropTypes.func,
+        //由于form的trigger覆盖了，所以使用了triggerEvent
+        triggerEvent: PropTypes.func,
       };
 
       getChildContext() {
@@ -25,6 +31,8 @@ class Form extends React.Component {
           //表单验证都是在这里处理的
           FormItem: getFormItemComponent(this),
           on: this.on.bind(this),
+          //由于form的trigger覆盖了，所以使用了triggerEvent
+          triggerEvent: this.trigger.bind(this),
         };
       }
 
@@ -143,27 +151,85 @@ class Form extends React.Component {
       //存放各个filed的验证方法
       fieldsValidate = {};
       fieldsValue = {};
+      //临时存放fieldsValue
+      tempFieldsValue = {};
       fieldsError = {};
+      //临时存放fieldsError
+      tempFieldsError = {};
       //v17.0版本后会移除componentWillMount
       componentWillMount() {
-        this.on('form-values', ({ name, fieldValue }) => {
-          if (fieldValue) {
-            this.fieldsValue[name] = fieldValue;
-          } else {
-            delete this.fieldsValue[name];
+        this.on(
+          'form-values',
+          ({ name, fieldValue, isArrayInput, arrayItemIndexs }) => {
+            if (!isArrayInput) {
+              if (fieldValue) {
+                this.fieldsValue[name] = fieldValue;
+              } else {
+                delete this.fieldsValue[name];
+              }
+            } else {
+              //专门处理array-input value值
+              if (fieldValue) {
+                this.tempFieldsValue[name] = fieldValue;
+              } else {
+                delete this.tempFieldsValue[name];
+              }
+              const arrayItemName = name.split('_-_')[0];
+              this.setFieldByType(
+                'fieldsValue',
+                arrayItemName,
+                arrayItemIndexs
+              );
+            }
           }
-        });
-        this.on('form-errors', ({ name, fieldError }) => {
-          if (fieldError) {
-            this.fieldsError[name] = fieldError;
-          } else {
-            delete this.fieldsError[name];
+        );
+        this.on(
+          'form-errors',
+          ({ name, fieldError, isArrayInput, arrayItemIndexs }) => {
+            if (!isArrayInput) {
+              if (fieldError) {
+                this.fieldsError[name] = fieldError;
+              } else {
+                delete this.fieldsError[name];
+              }
+            } else {
+              //专门处理array-input error值
+              if (fieldError) {
+                this.tempFieldsError[name] = fieldError;
+              } else {
+                delete this.tempFieldsError[name];
+              }
+              const arrayItemName = name.split('_-_')[0];
+              this.setFieldByType(
+                'fieldsError',
+                arrayItemName,
+                arrayItemIndexs
+              );
+            }
           }
+        );
+
+        this.on('array-item-index-change', ({ name, arrayItemIndexs }) => {
+          this.setFieldByType('fieldsValue', name, arrayItemIndexs);
+          this.setFieldByType('fieldsError', name, arrayItemIndexs);
         });
       }
-      //兼容后续新版本componentWillMount
-      UNSAFE_componentWillMount() {
-        this.componentWillMount();
+      setFieldByType(fieldType, name, arrayItemIndexs) {
+        const arrayItemName = name;
+        this[fieldType][arrayItemName] = [];
+        arrayItemIndexs.forEach((v, k) => {
+          this[fieldType][arrayItemName][k] = this[
+            `temp${toUpperCaseByPosition(fieldType)}`
+          ][`${arrayItemName}_-_${v}`];
+        });
+        this[fieldType][arrayItemName] = this[fieldType][arrayItemName].filter(
+          v => {
+            return v;
+          }
+        );
+        if (this[fieldType][arrayItemName].length === 0) {
+          delete this[fieldType][arrayItemName];
+        }
       }
       componentWillUnmount() {
         this.off();
@@ -250,17 +316,24 @@ function getFormItemComponent(that) {
       trigger: PropTypes.string,
       //是否是group组件，如InputGroup，目前只有这个InputGroup传递了这个参数
       isGroup: PropTypes.bool,
+      //是否是多层jsx包裹
+      isAntdComponentDeep: PropTypes.bool,
+      //是否是arrayInput
+      isArrayInput: PropTypes.bool,
     };
     name = this.props.name;
     componentWillUnmount() {
-      that.off('form-set-field-value-' + this.name);
+      const name = this.name;
+      that.off('form-set-field-value-' + name);
+      this.triggerFormValue(name);
+      this.triggerFormError(name);
     }
     componentDidMount() {
       const name = this.name;
       const { initialValue, rules } = this.props;
       if (initialValue) {
         //设置初始化默认值
-        that.fieldsValue[name] = initialValue;
+        // that.fieldsValue[name] = initialValue;
         //验证默认值是否合法
         this.validateField(name, initialValue, rules);
       }
@@ -284,13 +357,8 @@ function getFormItemComponent(that) {
               validateStatus: undefined,
             });
           }
-          that.trigger('form-values', {
-            name,
-            fieldValue: initialValue,
-          });
-          that.trigger('form-errors', {
-            name,
-          });
+          this.triggerFormValue(name, initialValue);
+          this.triggerFormError(name);
         };
         if (names && names[0]) {
           if (!!~names.indexOf(name)) {
@@ -300,6 +368,22 @@ function getFormItemComponent(that) {
         } else if (!names) {
           resetValue();
         }
+      });
+    }
+    triggerFormValue(name, value) {
+      that.trigger('form-values', {
+        name,
+        fieldValue: value,
+        isArrayInput: this.context.isArrayInput,
+        arrayItemIndexs: this.props.arrayItemIndexs,
+      });
+    }
+    triggerFormError(name, error) {
+      that.trigger('form-errors', {
+        name,
+        fieldError: error,
+        isArrayInput: this.context.isArrayInput,
+        arrayItemIndexs: this.props.arrayItemIndexs,
       });
     }
     validateField(name, value, rules) {
@@ -312,13 +396,8 @@ function getFormItemComponent(that) {
               validateStatus: 'success',
               canBeRendered: true,
             });
-            that.trigger('form-values', {
-              name,
-              fieldValue: value,
-            });
-            that.trigger('form-errors', {
-              name,
-            });
+            this.triggerFormValue(name, value);
+            this.triggerFormError(name);
             resolve();
           },
           errors => {
@@ -328,13 +407,8 @@ function getFormItemComponent(that) {
               validateStatus: 'error',
               canBeRendered: true,
             });
-            that.trigger('form-values', {
-              name,
-            });
-            that.trigger('form-errors', {
-              name,
-              fieldError: errors,
-            });
+            this.triggerFormValue(name);
+            this.triggerFormError(name, errors);
             resolve(errors);
           }
         );
@@ -402,14 +476,54 @@ function getFormItemComponent(that) {
     renderItem(otherItemProps) {
       const context = this.context;
       this.deleteUnuseProps(otherItemProps);
-      const { children, ...other } = otherItemProps;
-      return React.cloneElement(children, {
-        size: context.size,
-        ...other,
-        onChange: this.onChange,
-        onBlur: this.onBlur,
-        id: 'afc-form-item-' + this.name,
+      if (context.isAntdComponentDeep) {
+        //这里目前只有array-input使用到
+        return this.renderDeepItem(otherItemProps);
+      } else {
+        const { children, ...other } = otherItemProps;
+        return React.cloneElement(children, {
+          size: context.size,
+          ...other,
+          onChange: this.onChange,
+          onBlur: this.onBlur,
+          id: 'afc-form-item-' + this.name,
+        });
+      }
+    }
+    //渲染表单组件(children不是antd表单组件，在children.prop.chidren或者更深层)
+    renderDeepItem(otherItemProps) {
+      const context = this.context;
+      let { children, ...other } = otherItemProps;
+      if (!children) {
+        return false;
+      }
+      if (!children[0]) {
+        //findAllReactComponentsByType，需要的数组，需要转换
+        //后续需要转换回来。
+        children = [children];
+      }
+      //这里会复杂一点，因为children不一定是antd表单组件，只是包含在更深层
+      //所以需要找出来，然后把props传递过去（需要替换）。
+      const targetItem = findAllReactComponentsByType(
+        children,
+        'OriginalAntdComponent'
+      );
+      if (targetItem.length > 1) {
+        console.error('原生的Form.Item只能包含一个原生的antd组件');
+      }
+      targetItem.forEach(target => {
+        const clone = React.cloneElement(target.child, {
+          size: context.size,
+          ...other,
+          onChange: this.onChange,
+          onBlur: this.onBlur,
+          id: 'afc-form-item-' + this.name,
+        });
+        //替换成最终的组件
+        target.children[target.index] = clone;
       });
+      //上面转换成数组后需要转换原来非数组children，否则会报key值不存在
+      return children[0];
     }
     deleteUnuseProps(otherItemProps) {
       delete otherItemProps.onlyLetter;
@@ -419,6 +533,7 @@ function getFormItemComponent(that) {
       delete otherItemProps.rules;
       delete otherItemProps.trigger;
       delete otherItemProps.aliasLabel;
+      delete otherItemProps.arrayItemIndexs;
     }
     render() {
       const { validateStatus, canBeRendered } = this.state;

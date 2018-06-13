@@ -67,7 +67,7 @@ export default class BasicComponent extends React.Component {
   }
   renderFormItem(item, otherProps) {
     const { FormItem } = this.context;
-    let { children, name, value, rules = [], ...other } = this.props;
+    let { name, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);
     if (other.type === 'email' || other.type === 'url') {
       other.type = 'text';
@@ -96,19 +96,22 @@ export default class BasicComponent extends React.Component {
       </FormItem>
     );
   }
-  render() {
+  validateRender(component) {
     if (!this.currentAntdComponent) {
       console.error('继承BasicComponent，必须定义currentAntdComponent');
     }
     //如果没有使用Form.create()
+    if (!this.context.form) {
+      return component;
+    }
+    return this.renderFormItem(component);
+  }
+  render() {
     const component = (
       <this.currentAntdComponent>
         {this.props.children}
       </this.currentAntdComponent>
     );
-    if (!this.context.form) {
-      return component;
-    }
-    return this.renderFormItem(component);
+    return this.validateRender(component);
   }
 }

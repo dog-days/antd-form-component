@@ -15,16 +15,47 @@ form
   .ant-select-arrow {
   right: 11px;
 }
+.ant-form-item-children {
+  display: block;
+}
+
 .afc-array-item {
+  margin-bottom: 24px;
+  .afc-array-item (@width) {
+    @array-input-right-width: @width;
+    .afc-array-item-right {
+      width: @array-input-right-width;
+    }
+    .has-success.has-feedback,
+    .has-warning.has-feedback,
+    .has-error.has-feedback,
+    .is-validating.has-feedback {
+      .ant-form-item-children:after {
+        right: @array-input-right-width;
+      }
+    }
+    .afc-array-item-plus {
+      float: right;
+      width: @array-input-right-width - 15;
+    }
+  }
+  &-large {
+    .afc-array-item(158px);
+  }
+  &-default {
+    .afc-array-item(150px);
+  }
+  &-small {
+    .afc-array-item(103px);
+  }
   &-con {
     display: flex;
   }
   &-left {
     flex: 1;
   }
-  &-right {
-    width: 100px;
-    border: 1px solid red;
+  &-radiogroup {
+    float: right;
   }
 }
 .afc-hide-label {

@@ -8,6 +8,7 @@ import Checkbox from './components/checkbox';
 import Radio from './components/radio';
 import Cascader from './components/cascader';
 import Password from './components/password';
+import ArrayInput from './components/input/array-input';
 export {
   Form,
   Input,
@@ -19,4 +20,5 @@ export {
   Radio,
   Cascader,
   Password,
+  ArrayInput,
 };

@@ -8,6 +8,10 @@ export default function(component) {
     FormItem: PropTypes.func,
     locale: PropTypes.object,
     useForm: PropTypes.bool,
+    size: PropTypes.string,
+    on: PropTypes.func,
+    //由于form的trigger覆盖了，所以使用了triggerEvent
+    triggerEvent: PropTypes.func,
   };
   return component;
 }
