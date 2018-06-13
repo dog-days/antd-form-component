@@ -183,6 +183,7 @@ var config = {
   resolve: {
     alias: {
       src: paths.src,
+      'antd-form-component/lib': path.resolve(process.cwd(), 'src'),
       'antd-form-component': path.resolve(process.cwd(), 'src'),
     },
     //不可留空字符串

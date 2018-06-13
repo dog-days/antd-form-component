@@ -5,9 +5,9 @@ import { Menu } from 'antd';
 
 import 'antd/dist/antd.css';
 import 'src/style/css/layout-main.less';
-import 'antd-form-component/assets/css/style.less';
+import 'antd-form-component/lib/assets/css/style.less';
 //antd@2.x.x需要引入下面样式
-// import 'antd-form-component/assets/css/style@2.x.x.less';
+// import 'antd-form-component/lib/assets/css/style@2.x.x.less';
 
 class MainLayout extends React.Component {
   renderItem(title, viewId) {
