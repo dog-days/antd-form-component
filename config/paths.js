@@ -26,7 +26,11 @@ var paths = {
     cwdPackageJsonConfig.index
   ),
   //程序打包目录，根据prefixURL变化
-  appBuild: path.resolve(cwdPackageJsonConfig.appSrcPath, '../build'),
+  appBuild: path.join(
+    process.cwd(),
+    'demo/build',
+    cwdPackageJsonConfig.basename
+  ),
   //app 程序目录
   src: path.resolve(cwdPackageJsonConfig.appSrcPath),
 };

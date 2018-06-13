@@ -13,7 +13,7 @@ import {
   Radio,
   Cascader,
   Password,
-  // ArrayInput,
+  ArrayInput,
 } from 'antd-form-component';
 
 const Option = Select.Option;
@@ -121,6 +121,7 @@ class IndexView extends React.Component {
               </Button>
             )}
             <Input name="text" required label="Text" value="text" />
+            <ArrayInput name="array" required label="Array" value={[1, 2, 3]} />
             <InputNumber label="InputNumber" name="input-number" required />
             <Input label="Email" name="email" required type="email" />
             <Input label="Url" name="url" required type="url" />
