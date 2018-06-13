@@ -106,6 +106,10 @@ export default class MultipleInput extends Input {
           if (k !== 0) {
             other.label = 'null';
           }
+          if (value[k] === undefined) {
+            //因为下面需要转换成字符串了
+            value[k] = '';
+          }
           const hideLabel = other.label === 'null' ? true : false;
           return (
             <Form.Item
