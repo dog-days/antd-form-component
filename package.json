@@ -1,5 +1,6 @@
 {
-  "version": "0.0.3",
+  "version": "0.0.1",
+  "name": "antd-form-component",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
   "module": "es/index.js",
@@ -42,7 +43,6 @@
     "sinon": "4.1.3",
     "sinon-chai": "2.14.0"
   },
-  "name": "antd-form",
   "scripts": {
     "build-css":
       "lessc ./src/assets/css/style.less ./src/assets/css/style.css && lessc ./src/assets/css/style@2.x.x.less ./src/assets/css/style@2.x.x.css",
