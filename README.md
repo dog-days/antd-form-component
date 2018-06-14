@@ -25,6 +25,10 @@ npm install antd-form-component --save
 
 antd支持到v2.x.x，react支持v15.x.x。
 
+> antd@3.x.x有一个bug，select的mode="tags"和mode="combobox"回车会触发form提交。
+>
+> antd@2.x.x没有这种问题。
+
 ### 浏览器
 
 兼容IE11以上，兼容谷歌、Safari、火狐等浏览器最新版本。
@@ -262,6 +266,25 @@ class Test extends React.Component {
 | wrapperCol  | 统一设置组件的wrapperCol                                     | object  | 否   | 无      |
 | 其他props   | 其他props完全跟antd [Form](https://ant.design/components/form-cn/#Form)一致 |         |      |         |
 
+上面的props优先级是最低的，组件传递的props可覆盖上面的属性，如：
+
+```jsx
+<Form
+  size="default"
+  labelCol={{ span: 4 }}
+  wrapperCol={{ span: 20 }}
+  hasFeedback
+>
+  <Form.Item  
+    hasFeedback={false} 
+    labelCol={{ span: 2 }}
+  	wrapperCol={{ span: 22 }}
+  >
+  	<Input name="test" size="small"/>
+  </Form.Item>
+</FormBuilder>
+```
+
 ### Form.create()
 
 基本跟antd的[Form.create()](https://ant.design/components/form-cn/#Form.create(options))一样。
@@ -276,8 +299,8 @@ class Test extends React.Component {
 | getFieldsValue    | 获取一组输入控件的值，如不传入参数，则获取全部组件的值       | Function([fieldNames: string[]])                             |
 | getFieldValue     | 获取一个输入控件的值                                         | Function(fieldName: string)                                  |
 | resetFields       | 重置一组输入控件的值（为 `initialValue`）与状态，如不传入参数，则重置所有组件 | Function([names: string[]])                                  |
-| setFields         | 设置一组输入控件的值与 Error。 [代码](https://github.com/react-component/form/blob/3b9959b57ab30b41d8890ff30c79a7e7c383cad3/examples/server-validate.js#L74-L79) | Function({ fieldName:{ value: any, errors: Error } })        |
-| setFieldsValue    | 设置一组输入控件的值（注意：不要在 `componentWillReceiveProps` 内使用，否则会导致死循环，[更多](https://github.com/ant-design/ant-design/issues/2985)） | Function({ fieldName:value }                                 |
+| setFields         | 设置一组输入控件的值与 Error                                 | Function({ fieldName:{ value: any, errors: Error } })        |
+| setFieldsValue    | 设置一组输入控件的值（注意：不要在 `componentWillReceiveProps` 内使用，否则会导致死循环） | Function({ fieldName:value }                                 |
 | validateFields    | 校验并获取一组输入域的值与 Error，若 fieldNames 参数为空，则校验全部组件 | Function([fieldNames: string[]], options: object, callback: Function(errors, values)) |
 
 除了`getFieldDecorator`用法跟antd的不一样，上面其他方法的用法一样。
@@ -299,6 +322,43 @@ form.getFieldDecorator('inputnumber', {
 ```
 
 props参数跟组件的一样，详细请参考下面**表单组件公共props**。
+
+### Form.Item
+
+`antd-form-component`也提供了`Form.Item`作为传递props到antd的`Form.Item`（每个`antd-form-component`组件都是包含了antd的`From.Item`）。
+
+```jsx
+<Form>
+  <Input
+    name="email"
+    required
+    label="Email"
+    type="email"
+    locale={{ emailFormat: '电子邮件格式不正确' }}
+  />
+</Form>
+```
+
+上面的代码跟下面代码作用是一样的，不过多了一项可以传递props到antd的`Form.Item`。
+
+```jsx
+<Form>
+	<Form.Item 
+  	//这里面可以传递prop到  
+    hasFeedBack
+  >
+    <Input
+      name="email"
+      required
+      label="Email"
+      type="email"
+      locale={{ emailFormat: '电子邮件格式不正确' }}
+    />
+  </Form.Item>
+</Form>
+```
+
+
 
 ### 表单组件公共props
 
