@@ -80,7 +80,9 @@ function getDefaultRules(componentType, locale, label) {
         },
       });
     }
-    defaultRules = defaultRules.concat(getLenthRule(min, max, locale));
+    if (min || max) {
+      defaultRules = defaultRules.concat(getLenthRule(min, max, locale));
+    }
   }
   return defaultRules;
 }
