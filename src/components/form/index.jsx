@@ -351,6 +351,8 @@ function getFormItemComponent(that) {
     componentWillUnmount() {
       const name = this.name;
       that.off('form-set-field-value-' + name);
+      //删除unmount组件的validate
+      delete that.fieldsValidate[name];
       this.triggerFormValue(name);
       this.triggerFormError(name);
     }
