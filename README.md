@@ -175,7 +175,7 @@ import React from 'react';
 import { LocaleProvider } from 'antd';
 import AntdEnUS from 'antd/lib/locale-provider/en_US';
 import AntdFormComponentENUS from 'antd-form-component/lib/locale-provider/es_US';
-//整合Antd和FormBuilder的国际化语言
+//整合Antd和Form的国际化语言
 let enUS = Object.assign({},AntdEnUS,AntdFormComponentENUS);
 class Test extends React.Component {
 	return (
@@ -249,13 +249,12 @@ class Test extends React.Component {
 
 ```jsx
 <Form
-  config={config}
   onSubmit={ this.handleOnsubmit }
   size="default"
   hasFeedback={ false }
 >
   <Input name="test"/>
-</FormBuilder>
+</Form>
 ```
 
 | props       | 说明                                                         | 类型    | 必填 | 默认值  |
@@ -282,7 +281,7 @@ class Test extends React.Component {
   >
   	<Input name="test" size="small"/>
   </Form.Item>
-</FormBuilder>
+</Form>
 ```
 
 ### Form.create()
