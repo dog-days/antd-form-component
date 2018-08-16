@@ -24,28 +24,35 @@ class Form extends React.Component {
         //由于form的trigger覆盖了，所以使用了triggerEvent
         triggerEvent: PropTypes.func,
       };
-
+      formItem = getFormItemComponent(this);
       getChildContext() {
         return {
           form: this.form,
           //通过context传递给子组件使用，目前basic-component在使用
           //表单验证都是在这里处理的
-          FormItem: getFormItemComponent(this),
+          FormItem: this.formItem,
           on: this.on.bind(this),
           //由于form的trigger覆盖了，所以使用了triggerEvent
           triggerEvent: this.trigger.bind(this),
         };
       }
-
       form = {
+        //存放temp
+        customComponent: {},
         getFieldDecorator(name, props) {
           return component => {
             function newComponent(props) {
               return React.cloneElement(component, props);
             }
-            class AntdFormComponent extends BasicComponent {
-              currentAntdComponent = newComponent;
+            if (!this.customComponent[name]) {
+              //不可以重新定义，要不组件在state改变的情况下也会unmount
+              this.customComponent[
+                name
+              ] = class Component extends BasicComponent {
+                currentAntdComponent = newComponent;
+              };
             }
+            const AntdFormComponent = this.customComponent[name];
             return (
               <AntdFormComponent
                 {...props}
