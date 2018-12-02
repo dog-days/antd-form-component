@@ -11,10 +11,31 @@ AInput.displayName = 'OriginalAntdComponent';
 export default class Input extends BasicComponent {
   currentAntdComponent = AInput;
   localeKey = 'afcInput';
+  getOnlyLetterAndNumberRule() {
+    const locale = this.locale;
+    return [
+      {
+        validator(rule, value, callback, source, options) {
+          var errors = [];
+          //数组和字母结合
+          var pass = new RegExp('^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]*$').test(
+            value
+          );
+          if (!pass && value !== '') {
+            errors.push({
+              message: locale.afcPassword.formatErrorMsg,
+            });
+          }
+          callback(errors);
+        },
+      },
+    ];
+  }
   getSepcialRuleByType(type) {
     //继承父类可能有的rules
     const rules = super.getSepcialRuleByType();
     const locale = this.locale;
+    const { onlyLetterAndNumber } = this.props;
     switch (type) {
       case 'email':
         rules.push({
@@ -30,7 +51,11 @@ export default class Input extends BasicComponent {
         break;
       default:
     }
-    return rules;
+    if (onlyLetterAndNumber) {
+      return [...rules, ...this.getOnlyLetterAndNumberRule()];
+    } else {
+      return rules;
+    }
   }
 }
 Input.TextArea = class InputTextArea extends BasicComponent {

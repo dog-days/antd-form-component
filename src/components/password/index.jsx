@@ -26,26 +26,6 @@ export default class Password extends BasicComponent {
     ];
     return rules;
   }
-  getOnlyLetterAndNumberRule() {
-    const locale = this.locale;
-    return [
-      {
-        validator(rule, value, callback, source, options) {
-          var errors = [];
-          //数组和字母结合
-          var pass = new RegExp('^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]*$').test(
-            value
-          );
-          if (!pass && value !== '') {
-            errors.push({
-              message: locale.afcPassword.formatErrorMsg,
-            });
-          }
-          callback(errors);
-        },
-      },
-    ];
-  }
   onPasswordChange = e => {
     const { onChange } = this.props;
     this.setState({
@@ -59,7 +39,7 @@ export default class Password extends BasicComponent {
       rePassword,
       type = 'password',
       checkPassword,
-      rules = [],
+      onlyLetterAndNumber = true,
       ...other
     } = this.props;
     const locale = this.locale;
@@ -68,9 +48,9 @@ export default class Password extends BasicComponent {
         <Input
           autoComplete="new-password"
           type={type}
+          onlyLetterAndNumber={onlyLetterAndNumber}
           {...other}
           onChange={this.onPasswordChange}
-          rules={[...rules, ...this.getOnlyLetterAndNumberRule()]}
         />
         {(rePassword || checkPassword) && (
           //rePassword视为了兼容之前的formBuilder的api

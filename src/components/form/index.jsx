@@ -570,6 +570,7 @@ function getFormItemComponent(that) {
       delete otherItemProps.trigger;
       delete otherItemProps.aliasLabel;
       delete otherItemProps.arrayItemIndexs;
+      delete otherItemProps.onlyLetterAndNumber;
     }
     render() {
       const { validateStatus, canBeRendered } = this.state;
