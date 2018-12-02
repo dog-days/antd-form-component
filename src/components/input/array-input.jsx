@@ -22,11 +22,12 @@ export default class MultipleInput extends Input {
   constructor(props) {
     super(props);
     this.itemKeys = [];
-    let { value } = this.props;
-    if (!isArray(value)) {
-      value = [value];
+    // 保留原有value用法，value用法已废弃，使用initialValue代替
+    let { value, initialValue = value } = this.props;
+    if (!isArray(initialValue)) {
+      initialValue = [initialValue];
     }
-    value.forEach(v => {
+    initialValue.forEach(v => {
       this.itemKeys.push(randomKey());
     });
   }
@@ -92,7 +93,8 @@ export default class MultipleInput extends Input {
     }
   }
   render() {
-    const { value = [], ...other } = this.props;
+    // 保留原有value用法，value用法已废弃，使用initialValue代替
+    const { value = [], initialValue = value, ...other } = this.props;
     const size = this.context.size || 'default';
     return (
       <div
@@ -106,9 +108,9 @@ export default class MultipleInput extends Input {
           if (k !== 0) {
             other.label = 'null';
           }
-          if (value[k] === undefined) {
+          if (initialValue[k] === undefined) {
             //因为下面需要转换成字符串了
-            value[k] = '';
+            initialValue[k] = '';
           }
           const hideLabel = other.label === 'null' ? true : false;
           return (
@@ -154,7 +156,9 @@ export default class MultipleInput extends Input {
                   arrayItemIndexs: this.itemKeys,
                   //如果是数字转换成字符串
                   //input表单值不存在值为数字的情况。
-                  initialValue: isArray(value) ? value[k] + '' : value + '',
+                  initialValue: isArray(initialValue)
+                    ? initialValue[k] + ''
+                    : initialValue + '',
                 }
               )}
             </Form.Item>

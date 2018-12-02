@@ -67,7 +67,8 @@ export default class BasicComponent extends React.Component {
   }
   renderFormItem(item, otherProps) {
     const { FormItem } = this.context;
-    let { name, value, rules = [], ...other } = this.props;
+    //value 有歧义已废弃，使用initialValue 替换value，同时保留value用法
+    let { name, initialValue, value, rules = [], ...other } = this.props;
     const specialRules = this.getSepcialRuleByType(other.type);
     if (other.type === 'email' || other.type === 'url') {
       other.type = 'text';
@@ -80,7 +81,7 @@ export default class BasicComponent extends React.Component {
       <FormItem
         {...other}
         name={name}
-        initialValue={value}
+        initialValue={initialValue || value}
         rules={[
           ...this.getDefaultRules(
             other.type,

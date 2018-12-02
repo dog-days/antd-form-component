@@ -330,6 +330,7 @@ class Form extends React.Component {
     delete other.labelCol;
     delete other.wrapperCol;
     delete other.size;
+    delete other.trigger;
     return <AForm {...other}>{this.props.children}</AForm>;
   }
 }
@@ -366,7 +367,7 @@ function getFormItemComponent(that) {
     componentDidMount() {
       const name = this.name;
       const { initialValue, rules } = this.props;
-      if (initialValue) {
+      if (initialValue !== undefined) {
         //设置初始化默认值
         // that.fieldsValue[name] = initialValue;
         //验证默认值是否合法
@@ -452,7 +453,7 @@ function getFormItemComponent(that) {
     onChangeOrBlurEvent = (e, shouldValidate) => {
       const { noFormItem, type } = this.props;
       let value;
-      if (!e) {
+      if (e === undefined) {
         value = undefined;
       } else if (e.target) {
         value = e.target.value;
