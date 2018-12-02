@@ -257,13 +257,14 @@ class Test extends React.Component {
 </Form>
 ```
 
-| props       | 说明                                                         | 类型    | 必填 | 默认值  |
-| ----------- | ------------------------------------------------------------ | ------- | ---- | ------- |
-| size        | 统一设置组件size                                             | string  | 否   | default |
-| hasFeedback | 统一设置组件的hasFeedback                                    | boolean | 否   | false   |
-| labelCol    | 统一设置组件的labelCol                                       | object  | 否   | 无      |
-| wrapperCol  | 统一设置组件的wrapperCol                                     | object  | 否   | 无      |
-| 其他props   | 其他props完全跟antd [Form](https://ant.design/components/form-cn/#Form)一致 |         |      |         |
+| props       | 说明                                                         | 类型    | 必填 | 默认值   |
+| ----------- | ------------------------------------------------------------ | ------- | ---- | -------- |
+| size        | 统一设置组件size                                             | string  | 否   | default  |
+| hasFeedback | 统一设置组件的hasFeedback                                    | boolean | 否   | false    |
+| labelCol    | 统一设置组件的labelCol                                       | object  | 否   | 无       |
+| wrapperCol  | 统一设置组件的wrapperCol                                     | object  | 否   | 无       |
+| trigger     | 统一设置trigger，有onChange和onBlur两种                      | string  | 否   | onChange |
+| 其他props   | 其他props完全跟antd [Form](https://ant.design/components/form-cn/#Form)一致 |         |      |          |
 
 上面的props优先级是最低的，组件传递的props可覆盖上面的属性，如：
 
@@ -361,15 +362,17 @@ props参数跟组件的一样，详细请参考下面**表单组件公共props**
 
 ### 表单组件公共props
 
-| props      | 说明                                                         | 类型    | 必填 | 默认值 |
-| ---------- | ------------------------------------------------------------ | ------- | ---- | ------ |
-| name       | input、select等的的name（跟原生的html一样），同时async-validator要用到（表单验证），取值要用到，要唯一。 | string  | 是   | 无     |
-| label      | 表单项左边的展示名称                                         | string  | 否   | 无     |
-| value      | 初始化的value设置，**这里没有`defaultValue`的概念**。        |         |      |        |
-| required   | 表单项是否必填（这个验证会合并到rules中的）                  | boolean | 否   | 无     |
-| rules      | 验证规则请参考下面`props.rules`的说明。                      | array   | 否   | 无     |
-| noFormItem | 是否渲染antd的`Form.Item`                                    |         |      |        |
-| 其他props  | 其他props继承antd的中相应的表单组件，`defualtValue`除外。    |         |      |        |
+| props        | 说明                                                         | 类型    | 必填 | 默认值   |
+| ------------ | ------------------------------------------------------------ | ------- | ---- | -------- |
+| name         | input、select等的的name（跟原生的html一样），同时async-validator要用到（表单验证），取值要用到，要唯一。 | string  | 是   | 无       |
+| label        | 表单项左边的展示名称                                         | string  | 否   | 无       |
+| value        | 初始化的value设置，**这里没有`defaultValue`的概念**。**已废弃** | any     | 否   | 无       |
+| initialValue | 初始化的value设置，替换上面value。                           | any     | 否   | 无       |
+| required     | 表单项是否必填（这个验证会合并到rules中的）                  | boolean | 否   | 无       |
+| rules        | 验证规则请参考下面`props.rules`的说明。                      | array   | 否   | 无       |
+| noFormItem   | 是否渲染antd的`Form.Item`                                    |         |      |          |
+| trigger      | 有onChange和onBlur两种                                       | string  | 否   | onChange |
+| 其他props    | 其他props继承antd的中相应的表单组件，`defaultValue`和`value`除外。 |         |      |          |
 
 `props.rules`大致结构如下，更高级请参考 [async-validator](https://github.com/yiminghe/async-validator)。
 
