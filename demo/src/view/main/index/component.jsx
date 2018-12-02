@@ -117,8 +117,19 @@ export default class Component extends React.Component {
           </Button>
         )}
 
-        <Input name="text" required label="Text" value="text" />
-        <ArrayInput name="array" required label="Array" value={[1, 2, 3]} />
+        <Input
+          onlyLetterAndNumber
+          name="text"
+          required
+          label="Text"
+          initialValue="text11"
+        />
+        <ArrayInput
+          name="array"
+          required
+          label="Array"
+          initialValue={[1, 2, 3]}
+        />
         <InputNumber label="InputNumber" name="input-number" required />
         <Input label="Email" name="email" required type="email" />
         <Input label="Url" name="url" required type="url" />
@@ -134,7 +145,11 @@ export default class Component extends React.Component {
           // dataSource: ['12345', '23456', '34567'],
         })(<AutoComplete dataSource={['12345', '23456', '34567']} />)}
         <Input.Group compact label={'InputGroup'}>
-          <Select name="address-type" style={{ width: '30%' }} value="Home">
+          <Select
+            name="address-type"
+            style={{ width: '30%' }}
+            initialValue="Home"
+          >
             <Option value="Home">Home</Option>
             <Option value="Company">Company</Option>
           </Select>
@@ -154,7 +169,7 @@ export default class Component extends React.Component {
             { label: 'Pear', value: 'Pear' },
             { label: 'Orange', value: 'Orange' },
           ]}
-          value={['Pear']}
+          initialValue={['Pear']}
           required
         />
         <Radio.Group label="RadioGroup" name="radiogroup" value={1}>
@@ -173,7 +188,12 @@ export default class Component extends React.Component {
           <Option value="lucy">Lucy</Option>
           <Option value="Yiminghe">yiminghe</Option>
         </Select>
-        <Select label="Group Select" name="group-select" required>
+        <Select
+          label="Group Select"
+          name="group-select"
+          required
+          initialValue="jack"
+        >
           <OptGroup label="Manager">
             <Option value="jack">Jack</Option>
             <Option value="lucy">Lucy</Option>
@@ -210,20 +230,20 @@ export default class Component extends React.Component {
         <TimePicker
           label="TimePicker"
           name="timepicker"
-          value={moment('00:00:00', 'HH:mm:ss')}
+          initialValue={moment('00:00:00', 'HH:mm:ss')}
           required
         />
         <DatePicker
           label="DatePicker"
           name="datepicker"
-          value={moment('2015/01/01', dateFormat)}
+          initialValue={moment('2015/01/01', dateFormat)}
           format={dateFormat}
           required
         />
         <DatePicker.MonthPicker
           label="MonthPicker"
           name="monthpicker"
-          value={moment('2015/01', monthFormat)}
+          initialValue={moment('2015/01', monthFormat)}
           format={monthFormat}
           required
         />
@@ -231,7 +251,7 @@ export default class Component extends React.Component {
           label="RangePicker"
           name="rangepicker"
           format={dateFormat}
-          value={[
+          initialValue={[
             moment('2015/01/01', dateFormat),
             moment('2015/02/01', dateFormat),
           ]}
