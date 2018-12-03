@@ -193,16 +193,32 @@ class Form extends React.Component {
       componentWillMount() {
         this.on(
           'form-values',
-          ({ name, fieldValue, isArrayInput, arrayItemIndexs }) => {
+          ({
+            name,
+            fieldValue,
+            formComponentType,
+            isArrayInput,
+            arrayItemIndexs,
+          }) => {
             if (!isArrayInput) {
-              if (fieldValue) {
+              if (fieldValue === '') {
+                switch (formComponentType) {
+                  case 'text':
+                  case 'input-number':
+                  case 'password':
+                    fieldValue = undefined;
+                    break;
+                  default:
+                }
+              }
+              if (fieldValue !== undefined) {
                 this.fieldsValue[name] = fieldValue;
               } else {
                 delete this.fieldsValue[name];
               }
             } else {
               //专门处理array-input value值
-              if (fieldValue) {
+              if (fieldValue !== '' && fieldValue !== undefined) {
                 this.tempFieldsValue[name] = fieldValue;
               } else {
                 delete this.tempFieldsValue[name];
@@ -366,7 +382,8 @@ function getFormItemComponent(that) {
     }
     componentDidMount() {
       const name = this.name;
-      const { initialValue, rules } = this.props;
+      const { initialValue, rules, type } = this.props;
+      this.formComponentType = type;
       if (initialValue !== undefined) {
         //设置初始化默认值
         // that.fieldsValue[name] = initialValue;
@@ -408,6 +425,7 @@ function getFormItemComponent(that) {
     }
     triggerFormValue(name, value) {
       that.trigger('form-values', {
+        formComponentType: this.formComponentType,
         name,
         fieldValue: value,
         isArrayInput: this.context.isArrayInput,
