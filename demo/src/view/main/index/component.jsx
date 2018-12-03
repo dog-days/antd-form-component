@@ -130,7 +130,13 @@ export default class Component extends React.Component {
           label="Array"
           initialValue={[1, 2, 3]}
         />
-        <InputNumber label="InputNumber" name="input-number" required />
+        <InputNumber
+          min={0}
+          max={5}
+          label="InputNumber"
+          name="input-number"
+          required
+        />
         <Input label="Email" name="email" required type="email" />
         <Input label="Url" name="url" required type="url" />
         <Input label="File" name="file" required type="file" />

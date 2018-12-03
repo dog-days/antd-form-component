@@ -580,9 +580,11 @@ function getFormItemComponent(that) {
       return children[0];
     }
     deleteUnuseProps(otherItemProps) {
+      if (otherItemProps.type !== 'input-number') {
+        delete otherItemProps.min;
+        delete otherItemProps.max;
+      }
       delete otherItemProps.onlyLetter;
-      delete otherItemProps.min;
-      delete otherItemProps.max;
       delete otherItemProps.initialValue;
       delete otherItemProps.rules;
       delete otherItemProps.trigger;
