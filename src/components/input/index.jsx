@@ -23,7 +23,7 @@ export default class Input extends BasicComponent {
           );
           if (!pass && value !== '') {
             errors.push({
-              message: locale.afcPassword.formatErrorMsg,
+              message: locale.afcInput.formatErrorMsg,
             });
           }
           callback(errors);
