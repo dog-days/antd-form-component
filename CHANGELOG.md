@@ -1,3 +1,18 @@
+## 0.0.6(2018-12-03)
+
+#### Bug Fix
+
+- 解决 i18n 不正确问题
+- 解决 InputNubmer min max 不生效问题
+
+#### Update
+
+无
+
+#### New Function
+
+- InputNumber required 设置时，空值强制设置为 0。
+
 ## 0.0.5(2018-12-03)
 
 #### Bug Fix
