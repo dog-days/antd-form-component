@@ -7,7 +7,8 @@ export default {
     charactersBetwteen: '请输入%d到%d个字符',
     charactersMin: '不能小于%d个字符',
     charactersMax: '不能大于%d个字符',
-    charactersOnlyLetter: '请输入英文字母',
+    charactersOnlyLetter: '只允许输入英文字母',
+    charactersOnlyChinese: '只允许输入中文',
   },
   afcInput: {
     emailFormat: '电子邮件格式不正确',
