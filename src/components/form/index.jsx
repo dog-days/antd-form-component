@@ -469,7 +469,7 @@ function getFormItemComponent(that) {
       });
     }
     onChangeOrBlurEvent = (e, shouldValidate) => {
-      const { noFormItem, type, required } = this.props;
+      const { noFormItem, type, required, min } = this.props;
       let value;
       if (e === undefined) {
         value = undefined;
@@ -492,7 +492,7 @@ function getFormItemComponent(that) {
       }
       if (type === 'input-number') {
         if ((value === '' || value === undefined) && required) {
-          value = 0;
+          value = min || 0;
         }
       }
       if (!noFormItem && shouldValidate) {
