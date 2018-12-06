@@ -596,6 +596,7 @@ function getFormItemComponent(that) {
       delete otherItemProps.aliasLabel;
       delete otherItemProps.arrayItemIndexs;
       delete otherItemProps.onlyLetterAndNumber;
+      delete otherItemProps.onlyChinese;
     }
     render() {
       const { validateStatus, canBeRendered } = this.state;

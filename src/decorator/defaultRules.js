@@ -57,7 +57,7 @@ function getDefaultRules(componentType, locale, label) {
     //没有使用form.create()，也没有使用<Form />
     return [];
   }
-  const { required, min, max, onlyLetter } = this.props;
+  const { required, min, max, onlyLetter, onlyChinese } = this.props;
   let defaultRules = [];
   if (required) {
     defaultRules.push({
@@ -82,6 +82,22 @@ function getDefaultRules(componentType, locale, label) {
     }
     if (min || max) {
       defaultRules = defaultRules.concat(getLenthRule(min, max, locale));
+    }
+  }
+  if (componentType === 'text') {
+    if (onlyChinese) {
+      defaultRules.push({
+        validator(rule, value, callback) {
+          var errors = [];
+          var pass = /^[\u4e00-\u9fa5\s]+$/.test(value);
+          if (!pass && value !== '') {
+            errors.push({
+              message: locale.afcCommon.charactersOnlyChinese,
+            });
+          }
+          callback(errors);
+        },
+      });
     }
   }
   return defaultRules;
