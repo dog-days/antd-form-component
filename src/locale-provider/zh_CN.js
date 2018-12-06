@@ -4,9 +4,9 @@ export default {
   afcCommon: {
     isRequired: '请输入%s',
     //中文字符算两个英文字符
-    charactersBetwteen: '请输入%d到%d个长度的字符',
-    charactersMin: '字符长度不能小于%d',
-    charactersMax: '字符长度不能大于%d',
+    charactersBetwteen: '请输入%d到%d个字符',
+    charactersMin: '不能小于%d个字符',
+    charactersMax: '不能大于%d个字符',
     charactersOnlyLetter: '请输入英文字母',
   },
   afcInput: {
