@@ -131,7 +131,7 @@ export default class Component extends React.Component {
           initialValue={[1, 2, 3]}
         />
         <InputNumber
-          min={0}
+          min={1}
           max={5}
           label="InputNumber"
           name="input-number"
