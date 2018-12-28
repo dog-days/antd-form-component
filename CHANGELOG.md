@@ -1,3 +1,17 @@
+## 0.0.8(2018-12-28)
+
+### Bug Fix
+
+无
+
+### Update
+
+- 兼容空 input 值为字符串，同时优化了 array input
+
+### New Function
+
+无
+
 ## 0.0.7(2018-12-06)
 
 ### Bug Fix
