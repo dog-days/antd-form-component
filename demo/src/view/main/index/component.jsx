@@ -126,9 +126,9 @@ export default class Component extends React.Component {
         />
         <ArrayInput
           name="array"
-          required
+          // required
           label="Array"
-          initialValue={[1, 2, 3]}
+          // initialValue={[1, 2, 3]}
         />
         <InputNumber
           min={1}

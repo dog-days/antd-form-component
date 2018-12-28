@@ -6,11 +6,7 @@ import AForm from 'antd/lib/form';
 import merge from 'lodash/merge';
 //内部依赖包
 import event from '../../utils/event';
-import {
-  validateField,
-  toUpperCaseByPosition,
-  findAllReactComponentsByType,
-} from '../../utils/util';
+import { validateField, findAllReactComponentsByType } from '../../utils/util';
 import defaultLoacale from '../../locale-provider/zh_CN';
 import BasicComponent from '../basic-component';
 
@@ -193,36 +189,12 @@ class Form extends React.Component {
       componentWillMount() {
         this.on(
           'form-values',
-          ({
-            name,
-            fieldValue,
-            formComponentType,
-            isArrayInput,
-            arrayItemIndexs,
-          }) => {
+          ({ name, fieldValue, isArrayInput, arrayItemIndexs }) => {
             if (!isArrayInput) {
-              if (fieldValue === '') {
-                switch (formComponentType) {
-                  case 'text':
-                  case 'input-number':
-                  case 'password':
-                    fieldValue = undefined;
-                    break;
-                  default:
-                }
-              }
-              if (fieldValue !== undefined) {
-                this.fieldsValue[name] = fieldValue;
-              } else {
-                delete this.fieldsValue[name];
-              }
+              this.fieldsValue[name] = fieldValue;
             } else {
               //专门处理array-input value值
-              if (fieldValue !== '' && fieldValue !== undefined) {
-                this.tempFieldsValue[name] = fieldValue;
-              } else {
-                delete this.tempFieldsValue[name];
-              }
+              this.tempFieldsValue[name] = fieldValue;
               const arrayItemName = name.split('_-_')[0];
               this.setFieldByType(
                 'fieldsValue',
@@ -263,22 +235,28 @@ class Form extends React.Component {
           this.setFieldByType('fieldsError', name, arrayItemIndexs);
         });
       }
+      /**
+       * 专门处理 array-input fieldsError fieldsValue的
+       * @param {String} fieldType
+       * @param {String} name
+       * @param {Number} arrayItemIndexs
+       */
       setFieldByType(fieldType, name, arrayItemIndexs) {
         const arrayItemName = name;
         this[fieldType][arrayItemName] = [];
         arrayItemIndexs.forEach((v, k) => {
-          this[fieldType][arrayItemName][k] = this[
-            `temp${toUpperCaseByPosition(fieldType)}`
-          ][`${arrayItemName}_-_${v}`];
-        });
-        this[fieldType][arrayItemName] = this[fieldType][arrayItemName].filter(
-          v => {
-            return v;
+          if (fieldType === 'fieldsError') {
+            const fieldError = this.tempFieldsError[`${arrayItemName}_-_${v}`];
+            if (fieldError) {
+              this[fieldType][arrayItemName][k] = fieldError;
+            }
           }
-        );
-        if (this[fieldType][arrayItemName].length === 0) {
-          delete this[fieldType][arrayItemName];
-        }
+          if (fieldType === 'fieldsValue') {
+            this[fieldType][arrayItemName][k] = this.tempFieldsValue[
+              `${arrayItemName}_-_${v}`
+            ];
+          }
+        });
       }
       componentWillUnmount() {
         this.off();
