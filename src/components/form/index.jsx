@@ -90,7 +90,9 @@ class Form extends React.Component {
          */
         getFieldsValue: names => {
           if (!names) {
-            return this.fieldsValue;
+            return {
+              ...this.fieldsValue,
+            };
           } else if (names[0]) {
             const fieldsValue = {};
             name.forEach(v => {
@@ -173,7 +175,10 @@ class Form extends React.Component {
             })
             .then(errors => {
               callback &&
-                callback(errors, !!errors ? undefined : this.fieldsValue);
+                callback(
+                  errors,
+                  !!errors ? undefined : { ...this.fieldsValue }
+                );
             });
         },
       };
