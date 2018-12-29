@@ -1,3 +1,17 @@
+## 0.0.9(2018-12-29)
+
+### Bug Fix
+
+- 解决 getFieldsValue validateFields 中 form values 会被使用者覆盖的情况
+
+### Update
+
+无
+
+### New Function
+
+无
+
 ## 0.0.8(2018-12-28)
 
 ### Bug Fix
