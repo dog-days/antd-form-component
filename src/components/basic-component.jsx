@@ -81,7 +81,7 @@ export default class BasicComponent extends React.Component {
       <FormItem
         {...other}
         name={name}
-        initialValue={initialValue || value}
+        initialValue={initialValue !== undefined ? initialValue : value}
         rules={[
           ...this.getDefaultRules(
             other.type,
