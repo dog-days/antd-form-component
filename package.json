@@ -12,7 +12,7 @@
     "sprintf-js": "^1.1.1"
   },
   "devDependencies": {
-    "antd": "^3.6.2",
+    "antd": "^3.11.4",
     "babel-cli": "^6.26.0",
     "chai": "4.1.2",
     "cross-env": "^5.1.1",
