@@ -57,7 +57,14 @@ function getDefaultRules(componentType, locale, label) {
     //没有使用form.create()，也没有使用<Form />
     return [];
   }
-  const { required, min, max, onlyLetter, onlyChinese } = this.props;
+  const {
+    required,
+    min,
+    max,
+    onlyLetter,
+    onlyLetterOrNumber,
+    onlyChinese,
+  } = this.props;
   let defaultRules = [];
   if (required) {
     defaultRules.push({
@@ -74,6 +81,20 @@ function getDefaultRules(componentType, locale, label) {
           if (!pass) {
             errors.push({
               message: locale.afcCommon.charactersOnlyLetter,
+            });
+          }
+          callback(errors);
+        },
+      });
+    }
+    if (onlyLetterOrNumber) {
+      defaultRules.push({
+        validator(rule, value, callback) {
+          var errors = [];
+          var pass = new RegExp('^[0-9A-Za-z]*$').test(value);
+          if (!pass) {
+            errors.push({
+              message: locale.afcCommon.charactersOnlyLetterOrNumber,
             });
           }
           callback(errors);

@@ -118,7 +118,7 @@ export default class Component extends React.Component {
         )}
 
         <Input
-          onlyLetterAndNumber
+          onlyLetterOrNumber
           name="text"
           required
           label="Text"

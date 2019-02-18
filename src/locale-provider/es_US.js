@@ -8,6 +8,7 @@ export default {
     charactersMin: '不能小于%d个字符',
     charactersMax: '不能大于%d个字符',
     charactersOnlyLetter: '只允许输入英文字母',
+    charactersOnlyLetterOrNumber: '只允许输入英文或者字母',
     charactersOnlyChinese: '只允许输入中文',
   },
   afcInput: {

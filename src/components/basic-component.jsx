@@ -33,6 +33,8 @@ export default class BasicComponent extends React.Component {
     max: PropTypes.number,
     //input
     onlyLetter: PropTypes.bool,
+    //input
+    onlyLetterOrNumber: PropTypes.bool,
     //password（passord继承input）
     onlyLetterAndNumber: PropTypes.bool,
     //password
