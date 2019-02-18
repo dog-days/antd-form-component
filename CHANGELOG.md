@@ -1,3 +1,17 @@
+## 0.1.1(2019-02-18)
+
+### Bug Fix
+
+无
+
+### Update
+
+无
+
+### New Function
+
+- add props onlyLetterOrNumber for input component
+
 ## 0.0.10(2019-02-14)
 
 ### Bug Fix
