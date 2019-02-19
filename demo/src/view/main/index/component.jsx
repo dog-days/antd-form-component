@@ -138,6 +138,7 @@ export default class Component extends React.Component {
           required
         />
         <Input label="Email" name="email" required type="email" />
+        <Input label="IP" name="ip" required type="ip" />
         <Input label="Url" name="url" required type="url" />
         <Input label="File" name="file" required type="file" />
         <Input.TextArea autosize label="描述" name="textarea" required />

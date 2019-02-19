@@ -13,7 +13,8 @@ export default {
   },
   afcInput: {
     emailFormat: '电子邮件格式不正确',
-    urlFormat: 'url格式不正确',
+    urlFormat: 'URL 格式不正确',
+    ipFormat: 'IP 格式不正确',
     formatErrorMsg: '必须是字母和数字结合',
   },
   afcPassword: {

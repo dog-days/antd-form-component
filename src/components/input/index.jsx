@@ -11,6 +11,7 @@ AInput.displayName = 'OriginalAntdComponent';
 export default class Input extends BasicComponent {
   currentAntdComponent = AInput;
   localeKey = 'afcInput';
+
   getOnlyLetterAndNumberRule() {
     const locale = this.locale;
     return [
@@ -31,6 +32,21 @@ export default class Input extends BasicComponent {
       },
     ];
   }
+
+  getIpRule() {
+    const locale = this.locale;
+    return {
+      validator: (rule, value, callback, source, options) => {
+        const reg = /^([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])$/;
+        const errors = [];
+        if (!reg.test(value) && value) {
+          errors.push(locale.afcInput.ipFormat);
+        }
+        callback(errors);
+      },
+    };
+  }
+
   getSepcialRuleByType(type) {
     //继承父类可能有的rules
     const rules = super.getSepcialRuleByType();
@@ -48,6 +64,9 @@ export default class Input extends BasicComponent {
           type: 'url',
           message: locale.afcInput.urlFormat,
         });
+        break;
+      case 'ip':
+        rules.push(this.getIpRule());
         break;
       default:
     }
