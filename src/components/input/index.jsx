@@ -40,7 +40,9 @@ export default class Input extends BasicComponent {
         const reg = /^([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])\.([1-9]?\d|1\d\d|2[0-4]\d|25[0-5])$/;
         const errors = [];
         if (!reg.test(value) && value) {
-          errors.push(locale.afcInput.ipFormat);
+          errors.push({
+            message: locale.afcInput.ipFormat,
+          });
         }
         callback(errors);
       },
