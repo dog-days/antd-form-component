@@ -1,3 +1,17 @@
+## 0.2.1(2019-02-20)
+
+### Bug Fix
+
+- 解决 Input 组件 type=ip 报错问题
+
+### Update
+
+无
+
+### New Function
+
+无
+
 ## 0.2.0(2019-02-19)
 
 ### Bug Fix
